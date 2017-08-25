@@ -1,5 +1,6 @@
 import accountTransformer from './../../transformers/account';
 import store from './../../store';
+import Vue from 'vue';
 
 // When the request succeeds
 const success = (account) => {
@@ -26,15 +27,24 @@ export default () => {
    *     failed(error);
    *   });
    */
-  const succeeds = true;
 
-  if (succeeds) {
-    success({
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john@doe.com',
+  Vue.$http.get('/account')
+    .then((response) => {
+      success(response);
+    })
+    .catch((error) => {
+      failed(error);
     });
-  } else {
-    failed();
-  }
 };
+
+//   const succeeds = false;
+//   if (succeeds) {
+//     success({
+//       first_name: 'John',
+//       last_name: 'Doe',
+//       email: 'john@doe.com',
+//     });
+//   } else {
+//     failed();
+//   }
+// };

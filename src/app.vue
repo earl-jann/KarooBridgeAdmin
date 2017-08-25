@@ -14,7 +14,6 @@
   import store from './store';
   import { router, i18n } from './bootstrap';
   import accountService from './services/account';
-  import listenerService from './services/listener';
 
   export default {
     /**

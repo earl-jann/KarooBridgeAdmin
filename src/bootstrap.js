@@ -35,13 +35,14 @@ import authService from '@/services/auth';
 
 Axios.defaults.baseURL = process.env.API_LOCATION;
 Axios.defaults.headers.common.Accept = 'application/json';
-Axios.interceptors.response.use(
-  response => response,
-  (error) => {
-    if (error.response.status === 401) {
-      authService.logout();
-    }
-  });
+// somehow throwing an error when mocked
+// Axios.interceptors.response.use(
+//   response => response,
+//   (error) => {
+//     if (error.response.status === 401) {
+//       authService.logout();
+//     }
+//   });
 
 Vue.$http = Axios;
 Object.defineProperty(Vue.prototype, '$http', {
@@ -50,6 +51,18 @@ Object.defineProperty(Vue.prototype, '$http', {
   },
 });
 
+// MOCK_SERVICES
+// import MockAdapter from 'axios-mock-adapter';
+
+// // if (process.env.MOCK_SERVICES === 'true') {
+// const Mock = new MockAdapter(Axios);
+// Vue.$mockHttp = Mock;
+// Object.defineProperty(Vue.prototype, '$mockHttp', {
+//   get() {
+//     return Mock;
+//   },
+// });
+// }
 
 /* ============
  * Vuex Router Sync
