@@ -6,6 +6,8 @@
  */
 
 export default {
+  name: null,
+  description: null,
   ipAddress: null,
   externalAddress: null,
   tcpEnabled: null,

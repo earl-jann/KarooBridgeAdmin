@@ -3,7 +3,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.ipAddress" placeholder="Ip Address"></el-input>
+          <el-input v-model="filters.name" placeholder="Name"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" v-on:click="getListeners">Search</el-button>
@@ -16,14 +16,20 @@
     <el-table :data="listeners" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
       <el-table-column type="selection" width="55">
       </el-table-column>
-<!--       <el-table-column type="index" width="20">
-      </el-table-column> -->
+      <!--
+      <el-table-column type="index" width="20">
+      </el-table-column>
+      -->
+      <el-table-column prop="name" label="Name" width="300" sortable>
+      </el-table-column>
+      </el-table-column>
+        <el-table-column prop="description" label="Description" width="250" sortable>
+      </el-table-column>
       <el-table-column prop="ipAddress" label="IP Address" width="150" sortable>
       </el-table-column>
-<!--       <el-table-column prop="default" label="Default" width="50" :formatter="formatBoolean" sortable>
-      </el-table-column> -->
       <el-table-column prop="externalAddress" label="Ext Address" width="150" sortable>
       </el-table-column>
+      <!--
       <el-table-column prop="tcpEnabled" label="TCP" width="80" :formatter="formatBoolean" sortable>
       </el-table-column>
       <el-table-column prop="udpEnabled" label="UDP" width="80" :formatter="formatBoolean" sortable>
@@ -36,8 +42,9 @@
       </el-table-column>
       <el-table-column prop="tlsPort" label="TLS Port" width="100" sortable>
       </el-table-column>
-<!--       <el-table-column prop="subnets" label="Subnets" min-width="180" sortable>
-      </el-table-column> -->
+      <el-table-column prop="subnets" label="Subnets" min-width="180" sortable>
+      </el-table-column>
+      -->
       <el-table-column label="Actions" width="150">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
@@ -53,6 +60,12 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+        <el-form-item label="Name" prop="name">
+          <el-input v-model="editForm.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Description" prop="description">
+          <el-input v-model="editForm.description" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="IP Address" prop="ipAddress">
           <el-input v-model="editForm.ipAddress" auto-complete="off"></el-input>
         </el-form-item>
@@ -93,7 +106,7 @@
           <el-input-number v-model="editForm.sipPort" :min="0" :max="200000"></el-input-number>
         </el-form-item>
         <el-form-item label="TLS Port">
-          <el-input-number v-model="editForm.sipPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="editForm.tlsPort" :min="0" :max="200000"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
           <el-input type="textarea" v-model="editForm.subnets"></el-input>
@@ -107,6 +120,12 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+        <el-form-item label="Name" prop="name">
+          <el-input v-model="addForm.name" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Description" prop="description">
+          <el-input v-model="addForm.description" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="IP Address" prop="ipAddress">
           <el-input v-model="addForm.ipAddress" auto-complete="off"></el-input>
         </el-form-item>
@@ -147,7 +166,7 @@
           <el-input-number v-model="addForm.sipPort" :min="0" :max="200000"></el-input-number>
         </el-form-item>
         <el-form-item label="TLS Port">
-          <el-input-number v-model="addForm.sipPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="addForm.tlsPort" :min="0" :max="200000"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
           <el-input type="textarea" v-model="addForm.subnets"></el-input>
@@ -163,7 +182,7 @@
 
 <script>
   import util from '@/common/js/util';
-  import { getListenerListPage, removeListener, batchRemoveListener, editListener, addListener } from '@/services/listener';
+  import listenerService from '@/services/listener';
 
   export default {
 
@@ -177,46 +196,56 @@
         page: 1,
         listLoading: false,
         sels: [],
-
         editFormVisible: false,
         editLoading: false,
         editFormRules: {
           name: [
-          { required: true, message: 'Please enter your name', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
         },
 
         editForm: {
-          id: 0,
           name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: '',
+          description: '',
+          ipAddress: '',
+          externalAddress: '',
+          tcpEnabled: 0,
+          udpEnabled: 0,
+          wsEnabled: 0,
+          tlsEnabled: 0,
+          sipPort: 0,
+          tlsPort: 0,
+          subnets: '',
         },
 
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
           name: [
-          { required: true, message: 'Please enter your name', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
         },
 
         addForm: {
           name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: '',
+          description: '',
+          ipAddress: '',
+          externalAddress: '',
+          tcpEnabled: 0,
+          udpEnabled: 0,
+          wsEnabled: 0,
+          tlsEnabled: 0,
+          sipPort: 0,
+          tlsPort: 0,
+          subnets: '',
         },
       };
     },
 
     methods: {
 
-      formatBoolean(row, column) {
-        switch (row.udpEnabled) {
+      formatBoolean(value, column) {
+        switch (value) {
           case 0: return 'No';
           case 1: return 'Yes';
           default : return 'Unknown';
@@ -230,11 +259,11 @@
       getListeners() {
         const params = {
           page: this.page,
-          ipAddress: this.filters.ipAddress,
+          name: this.filters.name,
         };
         this.listLoading = true;
         // NProgress.start();
-        getListenerListPage(params).then((res) => {
+        listenerService.getListenerListPage(params).then((res) => {
           this.total = res.data.total;
           this.listeners = res.data.listeners;
           this.listLoading = false;
@@ -248,8 +277,8 @@
         }).then(() => {
           this.listLoading = true;
           // NProgress.start();
-          const params = { id: row.id };
-          removeListener(params).then((res) => {
+          const params = { name: row.name };
+          listenerService.removeListener(params).then((res) => {
             this.listLoading = false;
             // NProgress.done();
             this.$message({
@@ -272,10 +301,16 @@
         this.addFormVisible = true;
         this.addForm = {
           name: '',
-          sex: -1,
-          age: 0,
-          birth: '',
-          addr: '',
+          description: '',
+          ipAddress: '',
+          externalAddress: '',
+          tcpEnabled: 0,
+          udpEnabled: 0,
+          wsEnabled: 0,
+          tlsEnabled: 0,
+          sipPort: 0,
+          tlsPort: 0,
+          subnets: '',
         };
       },
 
@@ -286,8 +321,7 @@
               this.editLoading = true;
               // NProgress.start();
               const para = Object.assign({}, this.editForm);
-              para.birth = (!para.birth || para.birth === '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              editListener(para).then((res) => {
+              listenerService.editListener(para).then((res) => {
                 this.editLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -310,8 +344,7 @@
               this.addLoading = true;
               // NProgress.start();
               const para = Object.assign({}, this.addForm);
-              para.birth = (!para.birth || para.birth === '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-              addListener(para).then((res) => {
+              listenerService.addListener(para).then((res) => {
                 this.addLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -331,14 +364,14 @@
       },
 
       batchRemove() {
-        const ids = this.sels.map(item => item.id).toString();
+        const names = this.sels.map(item => item.name).toString();
         this.$confirm('Delete the selected records?', 'prompt', {
           type: 'warning',
         }).then(() => {
           this.listLoading = true;
           // NProgress.start();
-          const para = { ids };
-          batchRemoveListener(para).then((res) => {
+          const params = { names };
+          listenerService.batchRemoveListener(params).then((res) => {
             this.listLoading = false;
             // NProgress.done();
             this.$message({

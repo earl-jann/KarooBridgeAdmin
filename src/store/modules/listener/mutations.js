@@ -10,6 +10,8 @@ import { STORE } from './mutation-types';
 
 export default {
   [STORE](state, listener) {
+    state.name = listener.name;
+    state.description = listener.description;
     state.ipAddress = listener.ipAddress;
     state.externalAddress = listener.externalAddress;
     state.tcpEnabled = listener.tcpEnabled;

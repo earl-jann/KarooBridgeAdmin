@@ -29,9 +29,9 @@ export default {
     });
 
     mock.onGet('/listener/list').reply((config) => {
-      const { ipAddress } = config.params;
+      const { name } = config.params;
       const mockListeners = tempListeners.filter((listener) => {
-        if (ipAddress && listener.ipAddress.indexOf(ipAddress) === -1) return false;
+        if (name && listener.name.indexOf(name) === -1) return false;
         return true;
       });
       return new Promise((resolve, reject) => {
@@ -44,9 +44,9 @@ export default {
     });
 
     mock.onGet('/listener/listpage').reply((config) => {
-      const { page, ipAddress } = config.params;
+      const { page, name } = config.params;
       let mockListeners = tempListeners.filter((listener) => {
-        if (ipAddress && listener.ipAddress.indexOf(ipAddress) === -1) return false;
+        if (name && listener.name.indexOf(name) === -1) return false;
         return true;
       });
       const total = mockListeners.length;
@@ -63,8 +63,8 @@ export default {
     });
 
     mock.onGet('/listener/remove').reply((config) => {
-      const { id } = config.params;
-      tempListeners = tempListeners.filter(u => u.id !== id);
+      const { name } = config.params;
+      tempListeners = tempListeners.filter(u => u.name !== name);
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
@@ -76,9 +76,9 @@ export default {
     });
 
     mock.onGet('/listener/batchremove').reply((config) => {
-      let { ids } = config.params;
-      ids = ids.split(',');
-      tempListeners = tempListeners.filter(u => !ids.includes(u.id));
+      let { names } = config.params;
+      names = names.split(',');
+      tempListeners = tempListeners.filter(u => !names.includes(u.name));
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
@@ -90,14 +90,21 @@ export default {
     });
 
     mock.onGet('/listener/edit').reply((config) => {
-      const { id, name, addr, age, birth, sex } = config.params;
+      const { name, description, ipAddress, externalAddress, tcpEnabled,
+        udpEnabled, wsEnabled, tlsEnabled, sipPort, tlsPort, subnets } = config.params;
       tempListeners.some((u) => {
-        if (u.id === id) {
+        if (u.name === name) {
           u.name = name;
-          u.addr = addr;
-          u.age = age;
-          u.birth = birth;
-          u.sex = sex;
+          u.description = description;
+          u.ipAddress = ipAddress;
+          u.externalAddress = externalAddress;
+          u.tcpEnabled = tcpEnabled;
+          u.udpEnabled = udpEnabled;
+          u.wsEnabled = wsEnabled;
+          u.tlsEnabled = tlsEnabled;
+          u.sipPort = sipPort;
+          u.tlsPort = tlsPort;
+          u.subnets = subnets;
           return true;
         }
         return false;
@@ -113,8 +120,22 @@ export default {
     });
 
     mock.onGet('/listener/add').reply((config) => {
-      const { name, addr, age, birth, sex } = config.params;
-      tempListeners.push({ name, addr, age, birth, sex });
+      const { name, description, ipAddress, externalAddress, tcpEnabled,
+        udpEnabled, wsEnabled, tlsEnabled, sipPort, tlsPort, subnets } = config.params;
+
+      tempListeners.push({
+        name,
+        description,
+        ipAddress,
+        externalAddress,
+        tcpEnabled,
+        udpEnabled,
+        wsEnabled,
+        tlsEnabled,
+        sipPort,
+        tlsPort,
+        subnets,
+      });
 
       return new Promise((resolve, reject) => {
         setTimeout(() => {

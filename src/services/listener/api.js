@@ -1,27 +1,42 @@
 import axios from 'axios';
 
-const base = '';
+const base = process.env.API_LOCATION;
 
-export const getListenerList = (params) => {
-  (axios.get(`${base}/listener/list`, { params }));
+const getListenerList = (params) => {
+  const result = (axios.get(`${base}/listener/list`, { params }));
+  return result;
 };
 
-export const getListenerListPage = (params) => {
-  (axios.get(`${base}/listener/listpage`, { params }));
+const getListenerListPage = (params) => {
+  const result = (axios.get(`${base}/listener/listpage`, { params }));
+  return result;
 };
 
-export const removeListener = (params) => {
-  (axios.get(`${base}/listener/remove`, { params }));
+const removeListener = (params) => {
+  const result = (axios.get(`${base}/listener/remove`, { params }));
+  return result;
 };
 
-export const batchRemoveListener = (params) => {
-  (axios.get(`${base}/listener/batchremove`, { params }));
+const batchRemoveListener = (params) => {
+  const result = (axios.get(`${base}/listener/batchremove`, { params }));
+  return result;
 };
 
-export const editListener = (params) => {
-  (axios.get(`${base}/listener/edit`, { params }));
+const editListener = (params) => {
+  const result = (axios.get(`${base}/listener/edit`, { params }));
+  return result;
 };
 
-export const addListener = (params) => {
-  (axios.get(`${base}/listener/add`, { params }));
+const addListener = (params) => {
+  const result = (axios.get(`${base}/listener/add`, { params }));
+  return result;
+};
+
+export default {
+  addListener,
+  editListener,
+  batchRemoveListener,
+  removeListener,
+  getListenerListPage,
+  getListenerList,
 };
