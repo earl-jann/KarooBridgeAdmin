@@ -99,11 +99,14 @@ export default [
   {
     path: '/home',
     component: require('@/pages/Home.vue'),
-    name: 'Home',
-    iconCls: 'el-icon-message',
+    name: 'Listener',
+    iconCls: 'el-icon-setting',
     children: [
         { path: '/main', component: require('@/pages/Main.vue'), name: 'Main', hidden: true },
-        { path: '/table', component: require('@/pages/listener/listener.vue'), name: 'Listeners' },
+        { path: '/interface', component: require('@/pages/listener/listener.vue'), name: 'Interfaces' },
+        { path: '/default-interface', component: require('@/pages/listener/default_interface.vue'), name: 'Default Interface' },
+        { path: '/carp-ha-interface', component: require('@/pages/listener/carp_ha_interface.vue'), name: 'CARP HA Interface' },
+        { path: '/tls', component: require('@/pages/listener/tls.vue'), name: 'TLS' },
         // { path: '/form', component: Form, name: 'Form' },
         // { path: '/user', component: user, name: 'User' },
     ],
