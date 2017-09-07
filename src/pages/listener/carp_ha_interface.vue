@@ -1,10 +1,15 @@
 <template>
 	<el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;">
         <el-form-item label="Enabled">
-          <el-radio-group v-model="form.enabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="form.enabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Virtual IP Address" prop="virtualIpAddress">
           <el-input v-model="form.virtualIpAddress" auto-complete="off"></el-input>
@@ -31,37 +36,62 @@
           <el-input-number v-model="form.vhid" :min="1" :max="255"></el-input-number>
         </el-form-item>
         <el-form-item label="Preferred Master">
-          <el-radio-group v-model="form.preferredMaster">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="form.preferredMaster"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="External Address">
           <el-input type="textarea" v-model="form.externalAddress"></el-input>
         </el-form-item>
         <el-form-item label="TCP Enabled">
-          <el-radio-group v-model="form.tcpEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="form.tcpEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="UDP Enabled">
-          <el-radio-group v-model="form.udpEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="form.udpEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Websocket Enabled">
-          <el-radio-group v-model="form.wsEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="form.wsEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="TLS Enabled">
-          <el-radio-group v-model="form.tlsEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="form.tlsEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
           <el-input-number v-model="form.sipPort" :min="0" :max="200000"></el-input-number>

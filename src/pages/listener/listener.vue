@@ -79,28 +79,48 @@
           <el-input type="textarea" v-model="editForm.externalAddress"></el-input>
         </el-form-item>
         <el-form-item label="TCP Enabled">
-          <el-radio-group v-model="editForm.tcpEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="editForm.tcpEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="UDP Enabled">
-          <el-radio-group v-model="editForm.udpEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="editForm.udpEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Websocket Enabled">
-          <el-radio-group v-model="editForm.wsEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="editForm.wsEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="TLS Enabled">
-          <el-radio-group v-model="editForm.tlsEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="editForm.tlsEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
           <el-input-number v-model="editForm.sipPort" :min="0" :max="200000"></el-input-number>
@@ -139,28 +159,48 @@
           <el-input type="textarea" v-model="addForm.externalAddress"></el-input>
         </el-form-item>
         <el-form-item label="TCP Enabled">
-          <el-radio-group v-model="addForm.tcpEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="addForm.tcpEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="UDP Enabled">
-          <el-radio-group v-model="addForm.udpEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="addForm.wsEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Websocket Enabled">
-          <el-radio-group v-model="addForm.wsEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="addForm.wsEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="TLS Enabled">
-          <el-radio-group v-model="addForm.tlsEnabled">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="addForm.tlsEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-value="1"
+              off-value="0">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
           <el-input-number v-model="addForm.sipPort" :min="0" :max="200000"></el-input-number>
