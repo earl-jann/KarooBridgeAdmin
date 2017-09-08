@@ -107,11 +107,20 @@ export default [
         { path: '/default-interface', component: require('@/pages/listener/default_interface.vue'), name: 'Default Interface' },
         { path: '/carp-ha-interface', component: require('@/pages/listener/carp_ha_interface.vue'), name: 'CARP HA Interface' },
         { path: '/tls', component: require('@/pages/listener/tls.vue'), name: 'TLS' },
-        // { path: '/form', component: Form, name: 'Form' },
-        // { path: '/user', component: user, name: 'User' },
+        { path: '/autoban', component: require('@/pages/listener/autoban.vue'), name: 'Autoban' },
+        { path: '/port-ranges', component: require('@/pages/listener/port_ranges.vue'), name: 'Port Ranges' },
     ],
   },
-
+  {
+    path: '/home',
+    component: require('@/pages/Home.vue'),
+    name: 'User Agent',
+    iconCls: 'el-icon-setting',
+    children: [
+        { path: '/user-agent', component: require('@/pages/user_agent/user_agent.vue'), name: 'User Agent' },
+        { path: '/channel-limits', component: require('@/pages/user_agent/channel_limits.vue'), name: 'Channel Limits' },
+    ],
+  },
   {
     path: '/',
     redirect: '/home',

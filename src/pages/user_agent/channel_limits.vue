@@ -3,48 +3,31 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="Name"></el-input>
+          <el-input v-model="filters.prefix" placeholder="Prefix"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getListeners">Search</el-button>
+          <el-button type="primary" v-on:click="getChannelLimits">Search</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAdd">New</el-button>
         </el-form-item>
       </el-form>
     </el-col>
-    <el-table :data="listeners" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+    <el-table :data="channelLimits" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
       <el-table-column type="selection" width="55">
       </el-table-column>
       <!--
       <el-table-column type="index" width="20">
       </el-table-column>
       -->
-      <el-table-column prop="name" label="Name" width="300" sortable>
+      <el-table-column prop="prefix" label="Prefix" width="200" sortable>
       </el-table-column>
       </el-table-column>
-        <el-table-column prop="description" label="Description" width="250" sortable>
+        <el-table-column prop="enabled" label="Enabled" width="200" sortable>
       </el-table-column>
-      <el-table-column prop="ipAddress" label="IP Address" width="150" sortable>
+      <el-table-column prop="maxChannels" label="Max Channels" width="300" sortable>
       </el-table-column>
-      <el-table-column prop="externalAddress" label="Ext Address" width="150" sortable>
-      </el-table-column>
-      <!--
-      <el-table-column prop="tcpEnabled" label="TCP" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="udpEnabled" label="UDP" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="wsEnabled" label="WS" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="tlsEnabled" label="TLS" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="sipPort" label="SIP Port" width="100" sortable>
-      </el-table-column>
-      <el-table-column prop="tlsPort" label="TLS Port" width="100" sortable>
-      </el-table-column>
-      <el-table-column prop="subnets" label="Subnets" min-width="180" sortable>
-      </el-table-column>
-      -->
+
       <el-table-column label="Actions" width="150">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
@@ -60,28 +43,13 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="Name" prop="name">
-          <el-input v-model="editForm.name" auto-complete="off"></el-input>
+        <el-form-item label="Prefix" prop="prefix">
+          <el-input v-model="editForm.prefix" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="Description" prop="description">
-          <el-input v-model="editForm.description" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="IP Address" prop="ipAddress">
-          <el-input v-model="editForm.ipAddress" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="Default">
-          <el-radio-group v-model="editForm.default">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="External Address">
-          <el-input type="textarea" v-model="editForm.externalAddress"></el-input>
-        </el-form-item>
-        <el-form-item label="TCP Enabled">
+        <el-form-item label="Enabled">
           <el-tooltip :content="'Toggle to enable/disable'" placement="top">
             <el-switch
-              v-model="editForm.tcpEnabled"
+              v-model="editForm.enabled"
               on-color="#13ce66"
               off-color="#ff4949"
               on-value="1"
@@ -89,47 +57,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="UDP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="editForm.udpEnabled"
-              on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="editForm.wsEnabled"
-              on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="TLS Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="editForm.tlsEnabled"
-              on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="SIP Port">
-          <el-input-number v-model="editForm.sipPort" :min="0" :max="200000"></el-input-number>
-        </el-form-item>
-        <el-form-item label="TLS Port">
-          <el-input-number v-model="editForm.tlsPort" :min="0" :max="200000"></el-input-number>
-        </el-form-item>
-        <el-form-item label="Subnets">
-          <el-input type="textarea" v-model="editForm.subnets"></el-input>
+        <el-form-item label="Max Channels">
+          <el-input-number v-model="editForm.maxChannels" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -140,28 +69,16 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="Name" prop="name">
-          <el-input v-model="addForm.name" auto-complete="off"></el-input>
+        <el-form-item label="Prefix" prop="prefix">
+          <el-input v-model="addForm.prefix" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="Description" prop="description">
-          <el-input v-model="addForm.description" auto-complete="off"></el-input>
+        <el-form-item label="Prefix" prop="prefix">
+          <el-input v-model="addForm.prefix" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="IP Address" prop="ipAddress">
-          <el-input v-model="addForm.ipAddress" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="Default">
-          <el-radio-group v-model="addForm.default">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="External Address">
-          <el-input type="textarea" v-model="addForm.externalAddress"></el-input>
-        </el-form-item>
-        <el-form-item label="TCP Enabled">
+        <el-form-item label="Enabled">
           <el-tooltip :content="'Toggle to enable/disable'" placement="top">
             <el-switch
-              v-model="addForm.tcpEnabled"
+              v-model="addForm.enabled"
               on-color="#13ce66"
               off-color="#ff4949"
               on-value="1"
@@ -169,45 +86,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="UDP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="addForm.wsEnabled"
-              on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="addForm.wsEnabled"
-              on-color="#13ce66"
-              off-color="#ff4949">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="TLS Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="addForm.tlsEnabled"
-              on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="SIP Port">
-          <el-input-number v-model="addForm.sipPort" :min="0" :max="200000"></el-input-number>
-        </el-form-item>
-        <el-form-item label="TLS Port">
-          <el-input-number v-model="addForm.tlsPort" :min="0" :max="200000"></el-input-number>
-        </el-form-item>
-        <el-form-item label="Subnets">
-          <el-input type="textarea" v-model="addForm.subnets"></el-input>
+        <el-form-item label="Max Channels">
+          <el-input-number v-model="addForm.maxChannels" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -229,7 +109,7 @@
         filters: {
           name: '',
         },
-        listeners: [],
+        channelLimits: [],
         total: 0,
         page: 1,
         listLoading: false,
@@ -238,44 +118,28 @@
         editLoading: false,
         editFormRules: {
           name: [
-          { required: true, message: 'Please enter a valid name', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
           ],
         },
 
         editForm: {
-          name: '',
-          description: '',
-          ipAddress: '',
-          externalAddress: '',
-          tcpEnabled: true,
-          udpEnabled: true,
-          wsEnabled: true,
-          tlsEnabled: false,
-          sipPort: '0',
-          tlsPort: '0',
-          subnets: '',
+          prefix: '001',
+          enabled: true,
+          maxChannels: '0',
         },
 
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
           name: [
-          { required: true, message: 'Please enter a valid name', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
           ],
         },
 
         addForm: {
-          name: '',
-          description: '',
-          ipAddress: '',
-          externalAddress: '',
-          tcpEnabled: true,
-          udpEnabled: true,
-          wsEnabled: false,
-          tlsEnabled: true,
-          sipPort: 20010,
-          tlsPort: 9988,
-          subnets: '',
+          prefix: '',
+          enabled: true,
+          maxChannels: 30,
         },
       };
     },
@@ -303,7 +167,7 @@
         // NProgress.start();
         listenerService.getListenerListPage(params).then((res) => {
           this.total = res.data.total;
-          this.listeners = res.data.listeners;
+          this.channelLimits = res.data.channelLimits;
           this.listLoading = false;
           // NProgress.done();
         });
