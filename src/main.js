@@ -14,6 +14,14 @@ import '@/assets/theme/theme-darkblue/index.css';
 import 'font-awesome/css/font-awesome.min.css';
 import locale from 'element-ui/lib/locale/lang/en';
 import MockServices from '@/mockservices';
+import vueLogger from 'vue-logger';
+
+Vue.use(vueLogger, {
+  prefix: () => new Date(),
+  dev: true,
+  shortname: true,
+  levels: ['log', 'warn', 'debug', 'error', 'dir'],
+});
 
 Vue.use(ElementUI, { locale });
 

@@ -28,10 +28,10 @@ export default {
       msg: 'failure',
     });
 
-    mock.onGet('/listener/list').reply((config) => {
-      const { name } = config.params;
+    mock.onGet('/interfaces').reply((config) => {
+      const { id } = config.params;
       const mockListeners = tempListeners.filter((listener) => {
-        if (name && listener.name.indexOf(name) === -1) return false;
+        if (id && listener.id.indexOf(id) === -1) return false;
         return true;
       });
       return new Promise((resolve, reject) => {
@@ -43,28 +43,29 @@ export default {
       });
     });
 
-    mock.onGet('/listener/listpage').reply((config) => {
-      const { page, name } = config.params;
-      let mockListeners = tempListeners.filter((listener) => {
-        if (name && listener.name.indexOf(name) === -1) return false;
-        return true;
-      });
-      const total = mockListeners.length;
-      mockListeners = mockListeners.filter((u, index) =>
-        index < 20 * page && index >= 20 * (page - 1));
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve([200, {
-            total,
-            listeners: mockListeners,
-          }]);
-        }, 1000);
-      });
-    });
+    // mock.onGet('/interfaces').reply((config) => {
+    //   const { page, id } = config.params;
+    //   let mockListeners = tempListeners.filter((listener) => {
+    //     if (id && listener.id.indexOf(id) === -1) return false;
+    //     return true;
+    //   });
+    //   const total = mockListeners.length;
+    //   mockListeners = mockListeners.filter((u, index) =>
+    //     index < 20 * page && index >= 20 * (page - 1));
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //       resolve([200, {
+    //         total,
+    //         listeners: mockListeners,
+    //       }]);
+    //     }, 1000);
+    //   });
+    // });
 
-    mock.onGet('/listener/remove').reply((config) => {
-      const { name } = config.params;
-      tempListeners = tempListeners.filter(u => u.name !== name);
+    // the actual id can be grabbed from config.url
+    mock.onDelete(/\/interfaces\/\d+/).reply((config) => {
+      const { id } = config.url;
+      tempListeners = tempListeners.filter(u => u.id !== id);
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
@@ -76,9 +77,9 @@ export default {
     });
 
     mock.onGet('/listener/batchremove').reply((config) => {
-      let { names } = config.params;
-      names = names.split(',');
-      tempListeners = tempListeners.filter(u => !names.includes(u.name));
+      let { ids } = config.params;
+      ids = ids.split(',');
+      tempListeners = tempListeners.filter(u => !ids.includes(u.id));
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
@@ -89,12 +90,19 @@ export default {
       });
     });
 
-    mock.onGet('/listener/edit').reply((config) => {
-      const { name, description, ipAddress, externalAddress, tcpEnabled,
-        udpEnabled, wsEnabled, tlsEnabled, sipPort, tlsPort, subnets } = config.params;
+    mock.onPut(/\/interfaces\/\d+/).reply((config) => {
+      const mainId = config.url;
+      // Vue.$console.log(mainId);
+      Vue.console.debug('mockservices.listener.config: ' + config);
+      Vue.console.debug('mockservices.listener.config.data: ' + config.data);
+      if (config.url) {
+        Vue.console.debug('mockservices.listener.config.url: ' + mainId);
+      }
+      const { id, description, ipAddress, externalAddress, tcpEnabled,
+        udpEnabled, wsEnabled, tlsEnabled, sipPort, tlsPort, subnets } = config.data;
       tempListeners.some((u) => {
-        if (u.name === name) {
-          u.name = name;
+        if (u.id === id) {
+          u.id = id;
           u.description = description;
           u.ipAddress = ipAddress;
           u.externalAddress = externalAddress;
@@ -119,12 +127,12 @@ export default {
       });
     });
 
-    mock.onGet('/listener/add').reply((config) => {
-      const { name, description, ipAddress, externalAddress, tcpEnabled,
+    mock.onPost('/interfaces').reply((config) => {
+      const { id, description, ipAddress, externalAddress, tcpEnabled,
         udpEnabled, wsEnabled, tlsEnabled, sipPort, tlsPort, subnets } = config.params;
 
       tempListeners.push({
-        name,
+        id,
         description,
         ipAddress,
         externalAddress,

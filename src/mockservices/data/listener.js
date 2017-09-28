@@ -25,7 +25,7 @@ for (let i = 0; i < 86; i++) {
     // sip_port: Mock.Random.integer(10000, 30000),
     // tls_port: Mock.Random.integer(10000, 30000),
     // subnets: [Mock.Random.ip(), Mock.Random.ip(), Mock.Random.ip()],
-    name: Mock.Random.guid(),
+    id: Mock.Random.guid(),
     description: Mock.Random.word(3, 5),
     ipAddress: Mock.Random.ip(),
     default: Mock.Random.integer(0, 1),

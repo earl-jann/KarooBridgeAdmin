@@ -28,7 +28,7 @@ export default () => {
    *   });
    */
 
-  Vue.$http.get('/listener')
+  Vue.$http.get('/interfaces')
     .then((response) => {
       success(response);
     })

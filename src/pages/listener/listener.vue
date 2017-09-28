@@ -3,7 +3,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.name" placeholder="Name"></el-input>
+          <el-input v-model="filters.id" placeholder="Name"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" v-on:click="getListeners">Search</el-button>
@@ -20,7 +20,7 @@
       <el-table-column type="index" width="20">
       </el-table-column>
       -->
-      <el-table-column prop="name" label="Name" width="300" sortable>
+      <el-table-column prop="id" label="Name" width="300" sortable>
       </el-table-column>
       </el-table-column>
         <el-table-column prop="description" label="Description" width="250" sortable>
@@ -60,8 +60,8 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="Name" prop="name">
-          <el-input v-model="editForm.name" auto-complete="off"></el-input>
+        <el-form-item label="Name" prop="id">
+          <el-input v-model="editForm.id" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Description" prop="description">
           <el-input v-model="editForm.description" auto-complete="off"></el-input>
@@ -140,8 +140,8 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="Name" prop="name">
-          <el-input v-model="addForm.name" auto-complete="off"></el-input>
+        <el-form-item label="Name" prop="id">
+          <el-input v-model="addForm.id" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Description" prop="description">
           <el-input v-model="addForm.description" auto-complete="off"></el-input>
@@ -227,7 +227,7 @@
     data() {
       return {
         filters: {
-          name: '',
+          id: '',
         },
         listeners: [],
         total: 0,
@@ -237,13 +237,13 @@
         editFormVisible: false,
         editLoading: false,
         editFormRules: {
-          name: [
+          id: [
           { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
         },
 
         editForm: {
-          name: '',
+          id: '',
           description: '',
           ipAddress: '',
           externalAddress: '',
@@ -259,13 +259,13 @@
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
-          name: [
+          id: [
           { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
         },
 
         addForm: {
-          name: '',
+          id: '',
           description: '',
           ipAddress: '',
           externalAddress: '',
@@ -297,7 +297,7 @@
       getListeners() {
         const params = {
           page: this.page,
-          name: this.filters.name,
+          id: this.filters.id,
         };
         this.listLoading = true;
         // NProgress.start();
@@ -315,7 +315,7 @@
         }).then(() => {
           this.listLoading = true;
           // NProgress.start();
-          const params = { name: row.name };
+          const params = { id: row.id };
           listenerService.removeListener(params).then((res) => {
             this.listLoading = false;
             // NProgress.done();
@@ -338,7 +338,7 @@
       handleAdd() {
         this.addFormVisible = true;
         this.addForm = {
-          name: '',
+          id: '',
           description: '',
           ipAddress: '',
           externalAddress: '',
@@ -402,13 +402,13 @@
       },
 
       batchRemove() {
-        const names = this.sels.map(item => item.name).toString();
+        const ids = this.sels.map(item => item.id).toString();
         this.$confirm('Delete the selected records?', 'prompt', {
           type: 'warning',
         }).then(() => {
           this.listLoading = true;
           // NProgress.start();
-          const params = { names };
+          const params = { ids };
           listenerService.batchRemoveListener(params).then((res) => {
             this.listLoading = false;
             // NProgress.done();
