@@ -6,13 +6,14 @@
  * listener module.
  */
 
-import { STORE } from './mutation-types';
+import { FIND } from './mutation-types';
 
 export default {
-  [STORE](state, listener) {
+  [FIND](state, listener) {
+    state.id = listener.id;
     state.name = listener.name;
     state.description = listener.description;
-    state.ipAddress = listener.ipAddress;
+    state.ipAdddress = listener.ipAdddress;
     state.externalAddress = listener.externalAddress;
     state.tcpEnabled = listener.tcpEnabled;
     state.udpEnabled = listener.udpEnabled;

@@ -30,17 +30,17 @@
       <el-table-column prop="externalAddress" label="Ext Address" width="150" sortable>
       </el-table-column>
       <!--
-      <el-table-column prop="tcpEnabled" label="TCP" width="80" :formatter="formatBoolean" sortable>
+      <el-table-column prop="tcp_enabled" label="TCP" width="80" :formatter="formatBoolean" sortable>
       </el-table-column>
-      <el-table-column prop="udpEnabled" label="UDP" width="80" :formatter="formatBoolean" sortable>
+      <el-table-column prop="udp_enabled" label="UDP" width="80" :formatter="formatBoolean" sortable>
       </el-table-column>
-      <el-table-column prop="wsEnabled" label="WS" width="80" :formatter="formatBoolean" sortable>
+      <el-table-column prop="ws_enabled" label="WS" width="80" :formatter="formatBoolean" sortable>
       </el-table-column>
-      <el-table-column prop="tlsEnabled" label="TLS" width="80" :formatter="formatBoolean" sortable>
+      <el-table-column prop="tls_enabled" label="TLS" width="80" :formatter="formatBoolean" sortable>
       </el-table-column>
-      <el-table-column prop="sipPort" label="SIP Port" width="100" sortable>
+      <el-table-column prop="sip_port" label="SIP Port" width="100" sortable>
       </el-table-column>
-      <el-table-column prop="tlsPort" label="TLS Port" width="100" sortable>
+      <el-table-column prop="tls_port" label="TLS Port" width="100" sortable>
       </el-table-column>
       <el-table-column prop="subnets" label="Subnets" min-width="180" sortable>
       </el-table-column>
@@ -54,26 +54,31 @@
     </el-table>
 
     <el-col :span="24" class="toolbar">
-      <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">Delete Batch</el-button>
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+      <!--<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">Delete Batch</el-button>-->
+      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="float:right;">
       </el-pagination>
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="Name" prop="id">
-          <el-input v-model="editForm.id" auto-complete="off"></el-input>
+          <el-input v-model="editForm.id" :disabled="true" ></el-input>
         </el-form-item>
         <el-form-item label="Description" prop="description">
           <el-input v-model="editForm.description" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="IP Address" prop="ipAddress">
+        <el-form-item label="IP Address" prop="ip_address">
           <el-input v-model="editForm.ipAddress" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Default">
-          <el-radio-group v-model="editForm.default">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="editForm.default"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-text="Yes"
+              off-text="No">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="External Address">
           <el-input type="textarea" v-model="editForm.externalAddress"></el-input>
@@ -83,9 +88,7 @@
             <el-switch
               v-model="editForm.tcpEnabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -94,9 +97,7 @@
             <el-switch
               v-model="editForm.udpEnabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -105,9 +106,7 @@
             <el-switch
               v-model="editForm.wsEnabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -116,9 +115,7 @@
             <el-switch
               v-model="editForm.tlsEnabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -150,10 +147,15 @@
           <el-input v-model="addForm.ipAddress" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Default">
-          <el-radio-group v-model="addForm.default">
-            <el-radio class="radio" :label="1">Yes</el-radio>
-            <el-radio class="radio" :label="0">No</el-radio>
-          </el-radio-group>
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="addForm.default"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              on-text="Yes"
+              off-text="No">
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="External Address">
           <el-input type="textarea" v-model="addForm.externalAddress"></el-input>
@@ -163,16 +165,14 @@
             <el-switch
               v-model="addForm.tcpEnabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="UDP Enabled">
           <el-tooltip :content="'Toggle to enable/disable'" placement="top">
             <el-switch
-              v-model="addForm.wsEnabled"
+              v-model="addForm.udpEnabled"
               on-color="#13ce66"
               off-color="#ff4949"
               on-value="1"
@@ -219,8 +219,10 @@
 </template>
 
 <script>
+  import Vue from 'vue';
   import util from '@/common/js/util';
   import listenerService from '@/services/listener';
+  import InterfaceProxy from '@/proxies/InterfaceProxy';
 
   export default {
 
@@ -246,6 +248,7 @@
           id: '',
           description: '',
           ipAddress: '',
+          default: false,
           externalAddress: '',
           tcpEnabled: true,
           udpEnabled: true,
@@ -268,13 +271,14 @@
           id: '',
           description: '',
           ipAddress: '',
+          default: false,
           externalAddress: '',
           tcpEnabled: true,
           udpEnabled: true,
-          wsEnabled: false,
-          tlsEnabled: true,
-          sipPort: 20010,
-          tlsPort: 9988,
+          wsEnabled: true,
+          tlsEnabled: false,
+          sipPort: '0',
+          tlsPort: '0',
           subnets: '',
         },
       };
@@ -282,28 +286,34 @@
 
     methods: {
 
-      formatBoolean(value, column) {
-        switch (value) {
-          case 0: return 'No';
-          case 1: return 'Yes';
-          default : return 'Unknown';
-        }
-      },
       handleCurrentChange(val) {
         this.page = val;
         this.getListeners();
       },
 
       getListeners() {
+        // {"where":{"id":"earl"}}
+        // filter[where][property]=value
+        // const params = {
+        //   page: this.page,
+        //   id: this.filters.id,
+        // };
         const params = {
-          page: this.page,
-          id: this.filters.id,
+          'filter[where][id]': this.filters.id,
         };
         this.listLoading = true;
         // NProgress.start();
-        listenerService.getListenerListPage(params).then((res) => {
-          this.total = res.data.total;
-          this.listeners = res.data.listeners;
+        new InterfaceProxy(params).findAll().then((response) => {
+          if (typeof response !== 'undefined'
+            && response.length > 0
+            && typeof response[0].id !== 'undefined'
+            && response[0].id !== 'undefined') {
+            this.total = response.length;
+            this.listeners = response;
+          } else {
+            this.total = 0;
+            this.listeners = [];
+          }
           this.listLoading = false;
           // NProgress.done();
         });
@@ -315,8 +325,9 @@
         }).then(() => {
           this.listLoading = true;
           // NProgress.start();
-          const params = { id: row.id };
-          listenerService.removeListener(params).then((res) => {
+          const obj = { id: row.id };
+          new InterfaceProxy().destroy(obj.id).then((response) => {
+          // listenerService.removeListener(params).then((res) => {
             this.listLoading = false;
             // NProgress.done();
             this.$message({
@@ -341,13 +352,14 @@
           id: '',
           description: '',
           ipAddress: '',
+          default: false,
           externalAddress: '',
-          tcpEnabled: 0,
-          udpEnabled: 0,
-          wsEnabled: 0,
-          tlsEnabled: 0,
-          sipPort: 0,
-          tlsPort: 0,
+          tcpEnabled: false,
+          udpEnabled: false,
+          wsEnabled: false,
+          tlsEnabled: false,
+          sipPort: '0',
+          tlsPort: '0',
           subnets: '',
         };
       },
@@ -358,8 +370,9 @@
             this.$confirm('Are you sure?', 'prompt', {}).then(() => {
               this.editLoading = true;
               // NProgress.start();
-              const para = Object.assign({}, this.editForm);
-              listenerService.editListener(para).then((res) => {
+              const obj = Object.assign({}, this.editForm);
+              new InterfaceProxy().update(obj.id, obj).then((response) => {
+              // listenerService.editListener(para).then((res) => {
                 this.editLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -381,8 +394,9 @@
             this.$confirm('Are you sure?', 'prompt', {}).then(() => {
               this.addLoading = true;
               // NProgress.start();
-              const para = Object.assign({}, this.addForm);
-              listenerService.addListener(para).then((res) => {
+              const obj = Object.assign({}, this.addForm);
+              new InterfaceProxy().create(obj).then((response) => {
+              // listenerService.addListener(para).then((res) => {
                 this.addLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -400,7 +414,7 @@
       selsChange(sels) {
         this.sels = sels;
       },
-
+      // not needed, stub
       batchRemove() {
         const ids = this.sels.map(item => item.id).toString();
         this.$confirm('Delete the selected records?', 'prompt', {

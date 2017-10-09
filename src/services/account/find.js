@@ -28,13 +28,13 @@ export default () => {
    *   });
    */
 
-  Vue.$http.get('/account')
-    .then((response) => {
-      success(response);
-    })
-    .catch((error) => {
-      failed(error);
-    });
+  // Vue.$http.get('/account')
+  //   .then((response) => {
+  //     success(response);
+  //   })
+  //   .catch((error) => {
+  //     failed(error);
+  //   });
 };
 
 //   const succeeds = false;

@@ -10,6 +10,8 @@
  * they will be camelCased.
  */
 
+import Vue from 'vue';
+
 export default class Transformer {
   /**
    * Method used to transform a fetched collection

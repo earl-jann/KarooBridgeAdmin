@@ -5,7 +5,7 @@
  * The transformer for the user.
  */
 
-import Transformer from './transformer';
+import Transformer from './Transformer';
 
 export default class UserTransformer extends Transformer {
   /**

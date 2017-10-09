@@ -4,47 +4,41 @@ import store from './../../store';
 
 // When the request succeeds
 const success = (listener) => {
-  listener = listenerTransformer.fetch(listener);
-
   store.dispatch('listener/store', listener);
+  // redirect?
+  // Vue.router.push({
+  //   name: 'home.index',
+  // });
+};
+
+const prefix = 'services.listener.find.';
+
+// When the request succeeds
+const success = (listeners) => {
+  Vue.console.debug(prefix + '.success:' + listeners);
+  const storeListeners = listenerTransformer.fetchCollection(listeners.data);
+  Vue.console.debug(prefix + '.success:' + storeListeners);
+  store.dispatch('listener/store', storeListeners);
+
+  listeners.data = storeListeners;
+  return listeners;
 };
 
 // When the request fails
-const failed = () => {
+const failed = (error) => {
+  Vue.console.error(prefix + 'failed: ' + error);
 };
 
-export default () => {
-  /*
-   * Normally you would perform an AJAX-request.
-   * But to get the example working, the data is hardcoded.
-   *
-   * With the include REST-client Axios, you can do something like this:
-   * Vue.$http.get('/listener')
-   *   .then((response) => {
-   *     success(response);
-   *   })
-   *   .catch((error) => {
-   *     failed(error);
-   *   });
-   */
-
-  Vue.$http.get('/interfaces')
+export default (params) => {
+  const base = process.env.API_LOCATION;
+  const result = Vue.$http.post(`${base}/interfaces`, { params })
     .then((response) => {
       success(response);
+      return response;
     })
     .catch((error) => {
       failed(error);
     });
 
-  // const succeeds = true;
-
-  // if (succeeds) {
-  //   success({
-  //     ip_address: '192.56.22.3',
-  //     external_address: '200.21.2.3',
-  //     sip_port: 20000,
-  //   });
-  // } else {
-  //   failed();
-  // }
+  return result;
 };

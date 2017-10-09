@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Vue from 'vue';
+import find from './find';
 
 const base = process.env.API_LOCATION;
 
@@ -37,7 +38,11 @@ const editListener = (params) => {
 };
 
 const addListener = (params) => {
-  const result = (axios.post(`${base}/interfaces`, { params }));
+  Vue.console.debug('params: ' + params);
+  if (params.id) {
+    Vue.console.debug('params.id: ' + params.id + ', description: ' + params.description);
+  }
+  const result = (axios.post(`${base}/interfaces`, params));
   return result;
 };
 
@@ -48,46 +53,13 @@ export default {
   removeListener,
   getListenerListPage,
   getListenerList,
+  find,
 };
-
 
 // import find from './find';
 // import api from './api';
 
 // import axios from 'axios';
-
-// const base = '';
-
-// export const getListenerList = (params) => {
-//   const result = (axios.get(`${base}/listener/list`, { params }));
-//   return result;
-// };
-
-// export const getListenerListPage = (params) => {
-//   const result = (axios.get(`${base}/listener/listpage`, { params }));
-//   return result;
-// };
-
-// export const removeListener = (params) => {
-//   const result = (axios.get(`${base}/listener/remove`, { params }));
-//   return result;
-// };
-
-// export const batchRemoveListener = (params) => {
-//   const result = (axios.get(`${base}/listener/batchremove`, { params }));
-//   return result;
-// };
-
-// export const editListener = (params) => {
-//   const result = (axios.get(`${base}/listener/edit`, { params }));
-//   return result;
-// };
-
-// export const addListener = (params) => {
-//   const result = (axios.get(`${base}/listener/add`, { params }));
-//   return result;
-// };
-
 
 // // export default {
 // //   find,

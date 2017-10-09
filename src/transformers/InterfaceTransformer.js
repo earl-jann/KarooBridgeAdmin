@@ -5,9 +5,15 @@
  * The transformer for the listener.
  */
 
-import Transformer from './transformer';
+import Transformer from './Transformer';
+import Vue from 'vue';
 
-export default class ListenerTransformer extends Transformer {
+export default class InterfaceTransformer extends Transformer {
+
+  constructor() {
+    super();
+    Vue.console.debug('constructor: InterfaceTransformer');
+  }
   /**
    * Method used to transform a fetched listener
    *
@@ -17,15 +23,20 @@ export default class ListenerTransformer extends Transformer {
    */
   static fetch(listener) {
     return {
+      id: listener.id,
+      name: listener.name,
+      description: listener.description,
       ipAddress: listener.ip_address,
       externalAddress: listener.external_address,
       tcpEnabled: listener.tcp_enabled,
       udpEnabled: listener.udp_enabled,
       wsEnabled: listener.ws_enabled,
       tlsEnabled: listener.tls_enabled,
+      wssEnabled: listener.wss_enabled,
       sipPort: listener.sip_port,
       tlsPort: listener.tls_port,
       wsPort: listener.ws_port,
+      wssPort: listener.wss_port,
       subnets: listener.subnets,
     };
   }
@@ -39,15 +50,20 @@ export default class ListenerTransformer extends Transformer {
    */
   static send(listener) {
     return {
+      id: listener.id,
+      name: listener.name,
+      description: listener.description,
       ip_address: listener.ipAddress,
       external_address: listener.externalAddress,
       tcp_enabled: listener.tcpEnabled,
       udp_enabled: listener.udpEnabled,
       ws_enabled: listener.wsEnabled,
+      wss_enabled: listener.wssEnabled,
       tls_enabled: listener.tlsEnabled,
       sip_port: listener.sipPort,
       tls_port: listener.tlsPort,
       ws_port: listener.wsPort,
+      wss_port: listener.wssPort,
       subnets: listener.subnets,
     };
   }
