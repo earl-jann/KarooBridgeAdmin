@@ -94,7 +94,8 @@ export default [
   //     guest: true,
   //   },
   // },
-
+  // { path: '/default-interface', component: require('@/pages/listener/default_interface.vue'),
+  // name: 'Default Interface' },
     // element vue
   {
     path: '/home',
@@ -104,7 +105,6 @@ export default [
     children: [
         { path: '/main', component: require('@/pages/Main.vue'), name: 'Main', hidden: true },
         { path: '/interface', component: require('@/pages/listener/listener.vue'), name: 'Interfaces' },
-        { path: '/default-interface', component: require('@/pages/listener/default_interface.vue'), name: 'Default Interface' },
         { path: '/carp-ha-interface', component: require('@/pages/listener/carp_ha_interface.vue'), name: 'CARP HA Interface' },
         { path: '/tls', component: require('@/pages/listener/tls.vue'), name: 'TLS' },
         { path: '/autoban', component: require('@/pages/listener/autoban.vue'), name: 'Autoban' },
@@ -119,6 +119,17 @@ export default [
     children: [
         { path: '/user-agent', component: require('@/pages/user_agent/user_agent.vue'), name: 'User Agent' },
         { path: '/channel-limits', component: require('@/pages/user_agent/channel_limits.vue'), name: 'Channel Limits' },
+        { path: '/domain-limits', component: require('@/pages/user_agent/domain_limits.vue'), name: 'Domain Limits' },
+    ],
+  },
+  {
+    path: '/home',
+    component: require('@/pages/Home.vue'),
+    name: 'SIP Capture',
+    iconCls: 'el-icon-setting',
+    children: [
+        { path: '/homer', component: require('@/pages/sipcapture/homer.vue'), name: 'Homer' },
+        { path: '/voipmonitor', component: require('@/pages/sipcapture/voipmonitor.vue'), name: 'Voip Monitor' },
     ],
   },
   {

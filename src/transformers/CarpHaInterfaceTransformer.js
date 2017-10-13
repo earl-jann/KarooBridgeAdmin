@@ -8,7 +8,7 @@
 import Transformer from './Transformer';
 import Vue from 'vue';
 
-export default class InterfaceTransformer extends Transformer {
+export default class CarpHaInterfaceTransformer extends Transformer {
 
   /**
    * Method used to transform a fetched listener
@@ -20,15 +20,22 @@ export default class InterfaceTransformer extends Transformer {
   static fetch(listener) {
     return {
       id: listener.id,
-      name: listener.name,
+      enabled: listener.enabled,
+      virtualIpAddress: listener.virtual_ip_address,
+      interfaceName: listener.interface_name,
       description: listener.description,
-      ipAddress: listener.ip_address,
+      sourceAddress: listener.src_address,
+      upScript: listener.up_script,
+      downScript: listener.down_script,
+      carpPassword: listener.carp_password,
+      vhid: listener.vhid,
+      preferredMaster: listener.preferred_master,
       externalAddress: listener.external_address,
       tcpEnabled: listener.tcp_enabled,
       udpEnabled: listener.udp_enabled,
       wsEnabled: listener.ws_enabled,
-      tlsEnabled: listener.tls_enabled,
       wssEnabled: listener.wss_enabled,
+      tlsEnabled: listener.tls_enabled,
       sipPort: listener.sip_port,
       tlsPort: listener.tls_port,
       wsPort: listener.ws_port,
@@ -47,9 +54,16 @@ export default class InterfaceTransformer extends Transformer {
   static send(listener) {
     return {
       id: listener.id,
-      name: listener.name,
+      enabled: listener.enabled,
+      virtual_ip_address: listener.virtualIpAddress,
+      interface_name: listener.interfaceName,
       description: listener.description,
-      ip_address: listener.ipAddress,
+      src_address: listener.sourceAddress,
+      up_script: listener.upScript,
+      down_script: listener.downScript,
+      carp_password: listener.carpPassword,
+      vhid: listener.vhid,
+      preferred_master: listener.preferredMaster,
       external_address: listener.externalAddress,
       tcp_enabled: listener.tcpEnabled,
       udp_enabled: listener.udpEnabled,

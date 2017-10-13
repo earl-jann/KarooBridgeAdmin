@@ -61,7 +61,7 @@
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="Name" prop="id">
-          <el-input v-model="editForm.id" :disabled="true" ></el-input>
+          <el-input v-model="editForm.id" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Description" prop="description">
           <el-input v-model="editForm.description" auto-complete="off"></el-input>
@@ -367,7 +367,7 @@
       editSubmit() {
         this.$refs.editForm.validate((valid) => {
           if (valid) {
-            this.$confirm('Are you sure?', 'prompt', {}).then(() => {
+            this.$confirm('Are you sure?', 'prompt', { type: 'warning' }).then(() => {
               this.editLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.editForm);
@@ -391,7 +391,7 @@
       addSubmit() {
         this.$refs.addForm.validate((valid) => {
           if (valid) {
-            this.$confirm('Are you sure?', 'prompt', {}).then(() => {
+            this.$confirm('Are you sure?', 'prompt', { type: 'warning' }).then(() => {
               this.addLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.addForm);
@@ -406,6 +406,12 @@
                 this.$refs.addForm.resetFields();
                 this.addFormVisible = false;
                 this.getListeners();
+              }).catch((error) => {
+                Vue.console.error(error);
+                this.$message({
+                  message: 'Error in creating record!',
+                  type: 'error',
+                });
               });
             });
           }

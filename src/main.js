@@ -27,11 +27,11 @@ Vue.use(ElementUI, { locale });
 
 require('./bootstrap');
 
-Vue.console.debug('MOCK_SERVICES: ' + process.env.MOCK_SERVICES);
-const MOCK_SERVICES = process.env.MOCK_SERVICES || 'false';
-Vue.console.debug('MOCK_SERVICES: ' + MOCK_SERVICES);
-if (MOCK_SERVICES === 'true') {
-  MockServices.bootstrap();
-}
+// Vue.console.debug('MOCK_SERVICES: ' + process.env.MOCK_SERVICES);
+// const MOCK_SERVICES = process.env.MOCK_SERVICES || 'false';
+// Vue.console.debug('MOCK_SERVICES: ' + MOCK_SERVICES);
+// if (MOCK_SERVICES === 'true') {
+//   MockServices.bootstrap();
+// }
 
 new Vue(App).$mount('#app');

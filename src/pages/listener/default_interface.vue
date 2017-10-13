@@ -4,7 +4,7 @@
 			<el-input v-model="form.defaultInterfaceAddress" placeholder="Enter a Valid Interface Address" width="50"></el-input>
 		</el-form-item>
 		<el-form-item label="Default Interface Port">
-			<el-input-number v-model="form.deafultInterfacePort" :min="0" :max="200000"></el-input-number>
+			<el-input-number v-model="form.defaultInterfacePort" :min="0" :max="200000"></el-input-number>
 		</el-form-item>
     <el-form-item>
       <el-button type="primary">Submit</el-button>

@@ -3,24 +3,24 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.id" placeholder="Prefix"></el-input>
+          <el-input v-model="filters.id" placeholder="Domain"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getChannelLimits">Search</el-button>
+          <el-button type="primary" v-on:click="getObjects">Search</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAdd">New</el-button>
         </el-form-item>
       </el-form>
     </el-col>
-    <el-table :data="channelLimits" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+    <el-table :data="objects" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
       <el-table-column type="selection" width="55">
       </el-table-column>
       <!--
       <el-table-column type="index" width="20">
       </el-table-column>
       -->
-      <el-table-column prop="id" label="Prefix" width="200" sortable>
+      <el-table-column prop="id" label="Domain" width="200" sortable>
       </el-table-column>
       </el-table-column>
         <el-table-column prop="enabled" label="Enabled" width="200" sortable>
@@ -43,7 +43,7 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="Prefix" prop="id">
+        <el-form-item label="Domain" prop="id">
           <el-input v-model="editForm.id" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Enabled">
@@ -67,7 +67,7 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="Prefix" prop="id">
+        <el-form-item label="Domain" prop="id">
           <el-input v-model="addForm.id" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Enabled">
@@ -96,7 +96,7 @@
 <script>
   import Vue from 'vue';
   import util from '@/common/js/util';
-  import ChannelLimitsProxy from '@/proxies/ChannelLimitsProxy';
+  import DomainLimitsProxy from '@/proxies/DomainLimitsProxy';
 
   export default {
 
@@ -105,7 +105,7 @@
         filters: {
           id: '',
         },
-        channelLimits: [],
+        objects: [],
         total: 0,
         page: 1,
         listLoading: false,
@@ -114,7 +114,7 @@
         editLoading: false,
         editFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid domain', trigger: 'blur' },
           ],
         },
 
@@ -128,7 +128,7 @@
         addLoading: false,
         addFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid domain', trigger: 'blur' },
           ],
         },
 
@@ -146,22 +146,22 @@
         this.getListeners();
       },
 
-      getChannelLimits() {
+      getObjects() {
         const params = {
           'filter[where][id]': this.filters.id,
         };
         this.listLoading = true;
         // NProgress.start();
-        new ChannelLimitsProxy(params).findAll().then((response) => {
+        new DomainLimitsProxy(params).findAll().then((response) => {
           if (typeof response !== 'undefined'
             && response.length > 0
             && typeof response[0].id !== 'undefined'
             && response[0].id !== 'undefined') {
             this.total = response.length;
-            this.channelLimits = response;
+            this.objects = response;
           } else {
             this.total = 0;
-            this.channelLimits = [];
+            this.objects = [];
           }
           this.listLoading = false;
           // NProgress.done();
@@ -175,14 +175,14 @@
           this.listLoading = true;
           // NProgress.start();
           const obj = { id: row.id };
-          new ChannelLimitsProxy().destroy(obj.id).then((response) => {
+          new DomainLimitsProxy().destroy(obj.id).then((response) => {
             this.listLoading = false;
             // NProgress.done();
             this.$message({
               message: 'Success',
               type: 'success',
             });
-            this.getChannelLimits();
+            this.getObjects();
           });
         }).catch(() => {
 
@@ -210,7 +210,7 @@
               this.editLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.editForm);
-              new ChannelLimitsProxy().update(obj.id, obj).then((response) => {
+              new DomainLimitsProxy().update(obj.id, obj).then((response) => {
                 this.editLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -219,7 +219,7 @@
                 });
                 this.$refs.editForm.resetFields();
                 this.editFormVisible = false;
-                this.getChannelLimits();
+                this.getObjects();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -239,7 +239,7 @@
               this.addLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.addForm);
-              new ChannelLimitsProxy().create(obj).then((response) => {
+              new DomainLimitsProxy().create(obj).then((response) => {
                 this.addLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -248,7 +248,7 @@
                 });
                 this.$refs.addForm.resetFields();
                 this.addFormVisible = false;
-                this.getChannelLimits();
+                this.getObjects();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -286,7 +286,7 @@
       // },
     },
     mounted() {
-      this.getChannelLimits();
+      this.getObjects();
     },
   };
 

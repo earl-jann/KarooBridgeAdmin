@@ -98,7 +98,6 @@ class BaseProxy {
           }
         })
         .catch(({ response }) => {
-          Vue.console.error('Error: ' + response);
           if (response) {
             reject(response.data);
           } else {
