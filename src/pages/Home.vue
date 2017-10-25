@@ -109,8 +109,9 @@
         this.$confirm('Confirm Logout?', 'prompt', {
           // type: 'warning'
         }).then(() => {
-          sessionStorage.removeItem('user');
-          thisTemp.$router.push('/login');
+          // sessionStorage.removeItem('user');
+          // thisTemp.$router.push('/login');
+          this.$store.dispatch('auth/logout');
         }).catch(() => {
 
         });

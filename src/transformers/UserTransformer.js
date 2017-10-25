@@ -17,9 +17,13 @@ export default class UserTransformer extends Transformer {
    */
   static fetch(user) {
     return {
+      id: user.id,
+      userId: user.userId,
+      realm: user.realm,
       username: user.username,
       password: user.password,
-      name: user.name,
+      email: user.email,
+      status: user.status,
     };
   }
   /**
@@ -31,9 +35,13 @@ export default class UserTransformer extends Transformer {
    */
   static send(user) {
     return {
+      id: user.id,
+      userId: user.userId,
+      realm: user.realm,
       username: user.username,
       password: user.password,
-      name: user.name,
+      email: user.email,
+      status: user.status,
     };
   }
 }

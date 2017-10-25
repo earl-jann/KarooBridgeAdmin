@@ -17,7 +17,6 @@
 
   import store from './store';
   import { router, i18n } from './bootstrap';
-  import accountService from './services/account';
 
   export default {
     /**
@@ -42,7 +41,7 @@
       // If the user is authenticated,
       // fetch the data from the API
       if (this.$store.state.auth.authenticated) {
-        accountService.find();
+        this.$store.dispatch('user/find');
       }
     },
   };

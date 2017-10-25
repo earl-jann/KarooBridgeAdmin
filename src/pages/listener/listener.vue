@@ -221,7 +221,6 @@
 <script>
   import Vue from 'vue';
   import util from '@/common/js/util';
-  import listenerService from '@/services/listener';
   import InterfaceProxy from '@/proxies/InterfaceProxy';
 
   export default {
@@ -327,7 +326,6 @@
           // NProgress.start();
           const obj = { id: row.id };
           new InterfaceProxy().destroy(obj.id).then((response) => {
-          // listenerService.removeListener(params).then((res) => {
             this.listLoading = false;
             // NProgress.done();
             this.$message({
@@ -372,7 +370,6 @@
               // NProgress.start();
               const obj = Object.assign({}, this.editForm);
               new InterfaceProxy().update(obj.id, obj).then((response) => {
-              // listenerService.editListener(para).then((res) => {
                 this.editLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -396,7 +393,6 @@
               // NProgress.start();
               const obj = Object.assign({}, this.addForm);
               new InterfaceProxy().create(obj).then((response) => {
-              // listenerService.addListener(para).then((res) => {
                 this.addLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -429,15 +425,16 @@
           this.listLoading = true;
           // NProgress.start();
           const params = { ids };
-          listenerService.batchRemoveListener(params).then((res) => {
-            this.listLoading = false;
-            // NProgress.done();
-            this.$message({
-              message: 'Success',
-              type: 'success',
-            });
-            this.getListeners();
-          });
+          // unsupported
+          // listenerService.batchRemoveListener(params).then((res) => {
+          //   this.listLoading = false;
+          //   // NProgress.done();
+          //   this.$message({
+          //     message: 'Success',
+          //     type: 'success',
+          //   });
+          //   this.getListeners();
+          // });
         }).catch(() => {
         });
       },

@@ -9,4 +9,6 @@ export default {
   email: null,
   firstName: null,
   lastName: null,
+  realm: null,
+  id: null,
 };
