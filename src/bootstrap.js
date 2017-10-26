@@ -77,9 +77,7 @@ Object.defineProperty(Vue.prototype, '$http', {
  */
 import VuexRouterSync from 'vuex-router-sync';
 
-
 store.dispatch('auth/check');
-
 
 /* ============
  * Vue Router

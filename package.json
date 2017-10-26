@@ -47,6 +47,7 @@
     "vue-logger": "0.0.3",
     "vue-router": "^2.5.1",
     "vuex": "^2.3.1",
+    "vuex-persistedstate": "^2.0.0",
     "vuex-router-sync": "^4.1.2"
   },
   "devDependencies": {

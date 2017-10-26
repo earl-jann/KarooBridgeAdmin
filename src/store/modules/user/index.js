@@ -1,5 +1,5 @@
 /* ============
- * Account Module
+ * User Module
  * ============
  */
 

@@ -17,6 +17,7 @@
 
   import store from './store';
   import { router, i18n } from './bootstrap';
+  import Vue from 'vue';
 
   export default {
     /**
@@ -40,8 +41,10 @@
     mounted() {
       // If the user is authenticated,
       // fetch the data from the API
+      Vue.console.log('Main Created! Authenticated: ' + this.$store.state.auth.authenticated + ', User: ' + this.$store.state.user.userId);
       if (this.$store.state.auth.authenticated) {
-        this.$store.dispatch('user/find');
+        // set the auth token before finding...
+        this.$store.dispatch('user/find', this.$store.state.user.userId);
       }
     },
   };
