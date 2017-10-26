@@ -13,7 +13,6 @@
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>Custom Message</el-dropdown-item>
             <el-dropdown-item>Setup</el-dropdown-item>
             <el-dropdown-item divided @click.native="logout">Logout</el-dropdown-item>
           </el-dropdown-menu>
@@ -72,6 +71,8 @@
 </template>
 
 <script>
+  import Vue from 'vue';
+
   export default {
     data() {
       return {
@@ -125,12 +126,14 @@
       },
     },
     mounted() {
-      let user = sessionStorage.getItem('user');
-      if (user) {
-        user = JSON.parse(user);
-        this.sysUserName = user.name || '';
-        this.sysUserAvatar = user.avatar || '';
-      }
+      // let user = sessionStorage.getItem('user');
+      // if (user) {
+      //   user = JSON.parse(user);
+        // this.sysUserName = user.name || '';
+      this.sysUserName = this.$store.state.user.username;
+      Vue.console.log('username: ' + this.sysUserName);
+      // this.sysUserAvatar = user.avatar || '';
+      // }
     },
   };
 

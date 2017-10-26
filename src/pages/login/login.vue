@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="userForm" :rules="rules2" ref="userForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+  <el-form :model="userForm" :rules="rules" ref="userForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3 class="title">System Login</h3>
     <el-form-item prop="username">
       <el-input type="text" v-model="userForm.username" auto-complete="off" placeholder="username"></el-input>
@@ -7,10 +7,10 @@
     <el-form-item prop="checkPass">
       <el-input type="password" v-model="userForm.checkPass" auto-complete="off" placeholder="password"></el-input>
     </el-form-item>
-    <el-checkbox v-model="checked" checked class="remember">Remember password</el-checkbox>
+    <!-- <el-checkbox v-model="checked" checked class="remember">Remember password</el-checkbox> -->
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="loggingIn">Login</el-button>
-      <!--<el-button @click.native.prevent="handleReset2">Reset</el-button>-->
+      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="loggingIn">Login</el-button>
+      <!--<el-button @click.native.prevent="handleReset">Reset</el-button>-->
     </el-form-item>
   </el-form>
 </template>
@@ -24,23 +24,23 @@
         loggingIn: false,
         userForm: {
           username: 'admin',
-          checkPass: '123456',
+          checkPass: 'pass',
         },
-        rules2: {
+        rules: {
           username: [
             { required: true, message: 'Please input your username', trigger: 'blur' },
-            //{ validator: validaePass }
+            //{ validator: validateUsername }
           ],
           checkPass: [
             { required: true, message: 'Please enter your password', trigger: 'blur' },
-            //{ validator: validaePass2 }
+            //{ validator: validatePass }
           ],
         },
         checked: true,
       };
     },
     methods: {
-      handleReset2() {
+      handleReset() {
         this.$refs.userForm.resetFields();
       },
       /**
@@ -51,7 +51,7 @@
       login(user) {
         this.$store.dispatch('auth/login', user);
       },
-      handleSubmit2(ev) {
+      handleSubmit(ev) {
         const self = this;
         this.$refs.userForm.validate((valid) => {
           if (valid) {

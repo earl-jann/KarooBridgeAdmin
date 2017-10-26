@@ -1,34 +1,41 @@
 import Proxy from './Proxy';
+import AuthTransformer from '../transformers/AuthTransformer';
 
 class AuthProxy extends Proxy {
   /**
-   * The constructor for the ArtistProxy.
+   * The constructor for the AuthProxy.
    *
    * @param {Object} parameters The query parameters.
    */
   constructor(parameters = {}) {
-    super('oauth', parameters);
+    super('Users', parameters, AuthTransformer);
   }
 
   /**
-   * Method used to login.
+   * Method used to log in a user.
    *
-   * @param {String} username The username.
-   * @param {String} password The password.
+   * @param {Object} user
    *
    * @returns {Promise} The result in a promise.
    */
-  login({ username, password }) {
-    const data = {
-      username,
-      password,
-      client_id: process.env.API_CLIENT_ID,
-      client_secret: process.env.API_CLIENT_SECRET,
-      grant_type: 'password',
-      scope: '',
-    };
+  login(user) {
+    // in the future, we can use client_api and client_api_secret
+    // user.client_id = process.env.API_CLIENT_ID;
+    // user.client_secret = process.env.API_CLIENT_SECRET;
+    // user.grant_type = 'password';
+    // user.scope= '';
+    return this.submit('post', `/${this.endpoint}/login`, this.transformer.send, user);
+  }
 
-    return this.submit('post', `${this.endpoint}/token`, data);
+  /**
+   * Method used to log out a user.
+   *
+   * @param {Object} user
+   *
+   * @returns {Promise} The result in a promise.
+   */
+  logout(user) {
+    return this.submit('post', `/${this.endpoint}/logout`, this.transformer.send, user);
   }
 
   /**

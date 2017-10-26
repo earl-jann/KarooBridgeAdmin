@@ -9,7 +9,7 @@
 import Vue from 'vue';
 import store from '@/store';
 import * as types from './mutation-types';
-import UserProxy from '@/proxies/UserProxy';
+import AuthProxy from '@/proxies/AuthProxy';
 
 export const check = ({ commit }) => {
   commit(types.CHECK);
@@ -36,7 +36,7 @@ export const register = ({ commit }) => {
 
 export const login = ({ commit }, payload) => {
   const result = new Promise((resolve, reject) => {
-    new UserProxy()
+    new AuthProxy()
       .login(payload)
       .then((response) => {
         // commit the token

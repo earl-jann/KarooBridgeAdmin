@@ -18,7 +18,6 @@ export default class UserTransformer extends Transformer {
   static fetch(user) {
     return {
       id: user.id,
-      userId: user.userId,
       realm: user.realm,
       username: user.username,
       password: user.password,

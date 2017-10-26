@@ -15,7 +15,7 @@ export default [
     // element vue
   {
     path: '/login',
-    component: require('@/pages/Login.vue'),
+    component: require('@/pages/login/login.vue'),
     name: 'login.index',
     hidden: true,
     // If the user needs to be a guest to view this page.

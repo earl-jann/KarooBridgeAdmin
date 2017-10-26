@@ -14,6 +14,8 @@ export const find = ({ commit }, userId) => {
   new UserProxy()
    .find(userId)
    .then((response) => {
+     Vue.console.log('Find Response: ' + response);
+     Vue.console.log('Find Response: ' + response.id);
      commit(types.FIND, UserTransformer.fetch(response));
    })
    .catch(() => {

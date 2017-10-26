@@ -1,17 +1,19 @@
 /* ============
- * Mutations for the account module
+ * Mutations for the user module
  * ============
  *
  * The mutations that are available on the
- * account module.
+ * user module.
  */
 
 import { FIND } from './mutation-types';
 
 export default {
-  [FIND](state, account) {
-    state.email = account.email;
-    state.firstName = account.firstName;
-    state.lastName = account.lastName;
+  [FIND](state, user) {
+    state.userId = user.id;
+    state.email = user.email;
+    state.username = user.username;
+    state.firstName = user.firstName;
+    state.lastName = user.lastName;
   },
 };
