@@ -7,7 +7,7 @@
     <el-form-item prop="checkPass">
       <el-input type="password" v-model="userForm.checkPass" auto-complete="off" placeholder="password"></el-input>
     </el-form-item>
-    <el-checkbox v-model="checked" checked class="remember">Remember password</el-checkbox>
+    <!-- <el-checkbox v-model="checked" checked class="remember">Remember password</el-checkbox> -->
     <el-form-item style="width:100%;">
       <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="loggingIn">Login</el-button>
       <!--<el-button @click.native.prevent="handleReset">Reset</el-button>-->
