@@ -12,7 +12,8 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="Virtual IP Address" prop="virtualIpAddress">
-          <el-input v-model="form.virtualIpAddress" auto-complete="off"></el-input>
+          <el-input v-model="form.virtualIpAddress" auto-complete="off"
+          :disabled="disabled"></el-input>
         </el-form-item>
         <el-form-item label="Interface Name" prop="interfaceName">
           <el-input v-model="form.interfaceName" auto-complete="off"
@@ -25,7 +26,8 @@
         <el-form-item label="Source IP Address" prop="sourceAddress">
           <!-- <el-input v-model="form.sourceAddress" auto-complete="off"></el-input> -->
           <el-select v-model="sourceAddress" clearable placeholder="Select"
-          :loading='sourceAddressLoading' @change='assignListenerValuesToForm'>
+          :loading='sourceAddressLoading' @change='assignListenerValuesToForm'
+          :disabled="disabled">
             <el-option
               v-for="item in sourceAddresses"
               :key="item.id"
@@ -43,22 +45,26 @@
           <el-input type="textarea" v-model="form.downScript"></el-input>
         </el-form-item> -->
         <el-form-item label="CARP Password" prop="carpPassword">
-          <el-input type="password" v-model="form.carpPassword" auto-complete="off"></el-input>
+          <el-input type="password" v-model="form.carpPassword" auto-complete="off"
+          :disabled="disabled"></el-input>
         </el-form-item>
         <el-form-item label="VHID">
-          <el-input-number v-model="form.vhid" :min="1" :max="255"></el-input-number>
+          <el-input-number v-model="form.vhid" :min="1" :max="255"
+          :disabled="disabled"></el-input-number>
         </el-form-item>
         <el-form-item label="Preferred Master">
           <el-tooltip :content="'Toggle to enable/disable'" placement="top">
             <el-switch
               v-model="form.preferredMaster"
               on-color="#13ce66"
-              off-color="#ff4949">
+              off-color="#ff4949"
+              :disabled="disabled">
             </el-switch>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="External Address">
-          <el-input type="textarea" v-model="form.externalAddress"></el-input>
+          <el-input type="textarea" v-model="form.externalAddress"
+          :disabled="disabled"></el-input>
         </el-form-item>
         <el-form-item label="TCP Enabled">
           <el-tooltip :content="'Toggle to enable/disable'" placement="top">
@@ -172,10 +178,23 @@
         sourceAddress: '',
         sourceAddresses: [],
         formRules: {
+          virtualIpAddress: [
+          { required: true, message: 'Please enter a valid Virtual IP Address', trigger: 'blur' },
+          ],
           description: [
           { required: true, message: 'Please enter a valid description', trigger: 'blur' },
           ],
+          sourceAddress: [
+          { required: true, message: 'Please select a valid Source Address', trigger: 'blur' },
+          ],
+          carpPassword: [
+          { required: true, message: 'Please enter a valid password', trigger: 'blur' },
+          ],
+          vhid: [
+          { required: true, message: 'Please enter a valid vhid', trigger: 'blur' },
+          ],
         },
+        disabled: false,
         formLoading: true,
         sourceAddressLoading: false,
       };
@@ -234,42 +253,79 @@
         this.form = Object.assign({}, selectedListener);
         // just make sure
         this.form.id = 'carp_ha_interface';
+        this.form.enabled = true;
         Vue.console.log('form: ' + this.form);
       },
       resetFieldsIfOff(value) {
         if (value === false) {
-          this.form.externalAddress = '';
-          this.form.vhid = '';
           this.$refs.form.resetFields();
-          this.form.id = 'carp_ha_interface';
+          this.form = {
+            id: 'carp_ha_interface',
+            enabled: false,
+            virtualIpAddress: '',
+            interfaceName: '',
+            description: '',
+            sourceAddress: '',
+            upScript: '',
+            downScript: '',
+            carpPassword: '',
+            vhid: '',
+            preferredMaster: false,
+            externalAddress: '',
+            tcpEnabled: false,
+            udpEnabled: false,
+            wsEnabled: false,
+            wssEnabled: false,
+            tlsEnabled: false,
+            sipPort: '',
+            tlsPort: '',
+            wsPort: '',
+            wssPort: '',
+            subnets: '',
+          };
+          this.disabled = true;
+        } else {
+          this.disabled = false;
+          this.$refs.form.clearValidate();
         }
+        this.form.id = 'carp_ha_interface';
+      },
+      shouldValidateFields() {
+        return this.form.enabled === true;
+      },
+      submitForm() {
+        this.$confirm('Are you sure?', 'prompt', {}).then(() => {
+          this.formLoading = true;
+          // NProgress.start();
+          const obj = Object.assign({}, this.form);
+          obj.id = 'carp_ha_interface';
+          new CarpHaInterfaceProxy().create(obj).then((response) => {
+            this.formLoading = false;
+            // NProgress.done();
+            this.$message({
+              message: 'Success',
+              type: 'success',
+            });
+            this.getCarpHaInterface();
+          }).catch((error) => {
+            Vue.console.error(error);
+            this.$message({
+              message: 'Error in creating record!',
+              type: 'error',
+            });
+          });
+        });
       },
       onSubmit() {
+        if (this.form.enabled === false) {
+          Vue.console.log('onSubmit! ' + this.form.enabled);
+          this.$refs.form.resetFields();
+          this.submitForm();
+        }
         this.$refs.form.validate((valid) => {
-          Vue.console.debug('onSubmit!');
+          Vue.console.log('onSubmit!');
           if (valid) {
-            this.$confirm('Are you sure?', 'prompt', {}).then(() => {
-              this.formLoading = true;
-              // NProgress.start();
-              const obj = Object.assign({}, this.form);
-              obj.id = 'carp_ha_interface';
-              new CarpHaInterfaceProxy().create(obj).then((response) => {
-              // listenerService.addListener(para).then((res) => {
-                this.formLoading = false;
-                // NProgress.done();
-                this.$message({
-                  message: 'Success',
-                  type: 'success',
-                });
-                this.getCarpHaInterface();
-              }).catch((error) => {
-                Vue.console.error(error);
-                this.$message({
-                  message: 'Error in creating record!',
-                  type: 'error',
-                });
-              });
-            });
+            this.submitForm();
           }
         });
       },
