@@ -6,7 +6,8 @@
             <el-switch
               v-model="form.enabled"
               on-color="#13ce66"
-              off-color="#ff4949">
+              off-color="#ff4949"
+              @change='resetFieldsIfOff'>
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -14,13 +15,24 @@
           <el-input v-model="form.virtualIpAddress" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Interface Name" prop="interfaceName">
-          <el-input v-model="form.interfaceName" auto-complete="off"></el-input>
+          <el-input v-model="form.interfaceName" auto-complete="off"
+            disabled></el-input>
         </el-form-item>
         <el-form-item label="Description" prop="description">
-          <el-input v-model="form.description" auto-complete="off"></el-input>
+          <el-input v-model="form.description" auto-complete="off"
+            disabled></el-input>
         </el-form-item>
         <el-form-item label="Source IP Address" prop="sourceAddress">
-          <el-input v-model="form.sourceAddress" auto-complete="off"></el-input>
+          <!-- <el-input v-model="form.sourceAddress" auto-complete="off"></el-input> -->
+          <el-select v-model="sourceAddress" clearable placeholder="Select"
+          :loading='sourceAddressLoading' @change='assignListenerValuesToForm'>
+            <el-option
+              v-for="item in sourceAddresses"
+              :key="item.id"
+              :label="item.description"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-input type="hidden" v-model="form.upScript"></el-input>
         <el-input type="hidden" v-model="form.downScript"></el-input>
@@ -53,7 +65,8 @@
             <el-switch
               v-model="form.tcpEnabled"
               on-color="#13ce66"
-              off-color="#ff4949">
+              off-color="#ff4949"
+              disabled>
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -62,7 +75,8 @@
             <el-switch
               v-model="form.udpEnabled"
               on-color="#13ce66"
-              off-color="#ff4949">
+              off-color="#ff4949"
+              disabled>
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -71,7 +85,8 @@
             <el-switch
               v-model="form.wsEnabled"
               on-color="#13ce66"
-              off-color="#ff4949">
+              off-color="#ff4949"
+              disabled>
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -80,7 +95,8 @@
             <el-switch
               v-model="form.wssEnabled"
               on-color="#13ce66"
-              off-color="#ff4949">
+              off-color="#ff4949"
+              disabled>
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -89,24 +105,29 @@
             <el-switch
               v-model="form.tlsEnabled"
               on-color="#13ce66"
-              off-color="#ff4949">
+              off-color="#ff4949"
+              disabled>
             </el-switch>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
-          <el-input-number v-model="form.sipPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="form.sipPort" :min="0" :max="200000"
+          :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="TLS Port">
-          <el-input-number v-model="form.tlsPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="form.tlsPort" :min="0" :max="200000"
+          :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="WS Port">
-          <el-input-number v-model="form.wsPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="form.wsPort" :min="0" :max="200000"
+          :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="WSS Port">
-          <el-input-number v-model="form.wssPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="form.wssPort" :min="0" :max="200000"
+          :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
-          <el-input type="textarea" v-model="form.subnets"></el-input>
+          <el-input type="textarea" v-model="form.subnets" :disabled="true"></el-input>
         </el-form-item>
 
     <el-form-item>
@@ -119,6 +140,7 @@
   import Vue from 'vue';
   import util from '@/common/js/util';
   import CarpHaInterfaceProxy from '@/proxies/CarpHaInterfaceProxy';
+  import InterfaceProxy from '@/proxies/InterfaceProxy';
 
   export default {
     data() {
@@ -147,12 +169,15 @@
           wssPort: '',
           subnets: '',
         },
+        sourceAddress: '',
+        sourceAddresses: [],
         formRules: {
           description: [
           { required: true, message: 'Please enter a valid description', trigger: 'blur' },
           ],
         },
         formLoading: true,
+        sourceAddressLoading: false,
       };
     },
     methods: {
@@ -174,16 +199,50 @@
             this.form = Object.assign({}, response);
             // just make sure
             this.form.id = 'carp_ha_interface';
-            Vue.console.debug(this.form);
+            Vue.console.debug('getCarpHaInterface: ' + this.form);
           } else {
             this.$refs.form.resetFields();
             this.form.id = 'carp_ha_interface';
             Vue.console.warn('No record found.');
-            // this.listeners = [];
+            // this.sourceAddresses = [];
           }
           this.formLoading = false;
           // NProgress.done();
         });
+      },
+      getListeners() {
+        this.sourceAddressLoading = true;
+        // NProgress.start();
+        new InterfaceProxy().findAll().then((response) => {
+          if (typeof response !== 'undefined'
+            && response.length > 0
+            && typeof response[0].id !== 'undefined'
+            && response[0].id !== 'undefined') {
+            this.sourceAddresses = response;
+          } else {
+            this.sourceAddresses = [];
+          }
+          this.sourceAddressLoading = false;
+          // NProgress.done();
+        });
+      },
+      assignListenerValuesToForm(listenerId) {
+        Vue.console.log('listener: ' + listenerId);
+        Vue.console.log('form: ' + this.form);
+        const selectedListener = this.sourceAddresses.find(item => item.id === listenerId);
+        Vue.console.log('listener selected: ' + selectedListener);
+        this.form = Object.assign({}, selectedListener);
+        // just make sure
+        this.form.id = 'carp_ha_interface';
+        Vue.console.log('form: ' + this.form);
+      },
+      resetFieldsIfOff(value) {
+        if (value === false) {
+          this.form.externalAddress = '';
+          this.form.vhid = '';
+          this.$refs.form.resetFields();
+          this.form.id = 'carp_ha_interface';
+        }
       },
       onSubmit() {
         this.$refs.form.validate((valid) => {
@@ -217,6 +276,7 @@
     },
     mounted() {
       this.getCarpHaInterface();
+      this.getListeners();
     },
   };
 
