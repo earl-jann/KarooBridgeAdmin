@@ -1,34 +1,53 @@
 <template>
   <section>
-    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-      <el-form :inline="true" :model="filters">
-        <el-form-item>
-          <el-input v-model="filters.id" placeholder="Address"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" v-on:click="getPacketRateWhitelist">Search</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleAdd">New</el-button>
+  <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+      <el-form ref="formFirewall" :inline="true" :model="formFirewall" v-loading="formFirewallLoading">
+        <el-input type="hidden" v-model="formFirewall.id"></el-input>
+        <el-form-item label="Enabled">
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="formFirewall.enabled"
+              on-color="#13ce66"
+              off-color="#ff4949"
+              @change='submitFormFirewall'>
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
       </el-form>
     </el-col>
-    <el-table :data="packetRateWhitelist" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
+    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+      <el-form :inline="true" :model="filters">
+        <el-form-item>
+          <el-input v-model="filters.id" placeholder="Rule Name" :disabled="disabled"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" v-on:click="getFirewallRules" :disabled="disabled">Search</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleAdd" :disabled="disabled">New</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+    <el-table :data="firewallRules" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+<!--       <el-table-column type="selection" width="55" >
+      </el-table-column> -->
       <!--
       <el-table-column type="index" width="20">
       </el-table-column>
       -->
-      <el-table-column prop="id" label="Address" width="200" sortable>
+      <el-table-column prop="id" label="Name" width="200" :sortable="!disabled">
       </el-table-column>
-      <el-table-column prop="type" label="Type" :formatter="formatType" width="200" sortable>
+      <el-table-column prop="portBase" label="Port Number" width="200" :sortable="!disabled">
+      </el-table-column>
+      <el-table-column prop="portMax" label="Max Port Number" width="200" :sortable="!disabled">
+      </el-table-column>
+      <el-table-column prop="type" label="Type" width="150" :sortable="!disabled">
       </el-table-column>
 
       <el-table-column label="Actions">
         <template scope="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">Delete</el-button>
+          <el-button size="small" @click="handleEdit(scope.$index, scope.row)" :disabled="disabled">Edit</el-button>
+          <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)" :disabled="disabled">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,13 +59,20 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="Address" prop="id">
+        <el-form-item label="Name" prop="id">
           <el-input v-model="editForm.id" :disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="Description" prop="description">
+          <el-input v-model="editForm.description"></el-input>
+        </el-form-item>
+        <el-form-item label="Port Range">
+          <el-input-number v-model="editForm.portBase" @change=""></el-input-number>
+          <el-input-number v-model="editForm.portMax" @change=""></el-input-number>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="editForm.type" size="small">
-            <el-radio-button label="SOURCE_IP" border>IP Address</el-radio-button>
-            <el-radio-button label="SOURCE_NETWORK" border>Network</el-radio-button>
+            <el-radio-button label="UDP" border>UDP</el-radio-button>
+            <el-radio-button label="TCP" border>TCP</el-radio-button>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -58,13 +84,20 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="Address" prop="id">
-          <el-input v-model="addForm.id" auto-complete="off"></el-input>
+        <el-form-item label="Name" prop="id">
+          <el-input v-model="addForm.id"></el-input>
+        </el-form-item>
+        <el-form-item label="Description" prop="description">
+          <el-input v-model="addForm.description"></el-input>
+        </el-form-item>
+        <el-form-item label="Port Range">
+          <el-input-number v-model="addForm.portBase" @change=""></el-input-number>
+          <el-input-number v-model="addForm.portMax" @change=""></el-input-number>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="addForm.type" size="small">
-            <el-radio-button label="SOURCE_IP" border>IP Address</el-radio-button>
-            <el-radio-button label="SOURCE_NETWORK" border>Network</el-radio-button>
+            <el-radio-button label="UDP" border>UDP</el-radio-button>
+            <el-radio-button label="TCP" border>TCP</el-radio-button>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -79,16 +112,24 @@
 <script>
   import Vue from 'vue';
   import util from '@/common/js/util';
-  import PacketRateWhitelistProxy from '@/proxies/PacketRateWhitelistProxy';
+  import FirewallRulesProxy from '@/proxies/FirewallRulesProxy';
+  import FirewallProxy from '@/proxies/FirewallProxy';
+
+  const FORM_FIREWALL_ID = 'firewall';
 
   export default {
-
     data() {
       return {
+        formFirewall: {
+          id: FORM_FIREWALL_ID,
+          enabled: false,
+        },
         filters: {
           id: '',
         },
-        packetRateWhitelist: [],
+        formFirewallLoading: true,
+        disabled: false,
+        firewallRules: [],
         total: 0,
         page: 1,
         listLoading: false,
@@ -97,61 +138,116 @@
         editLoading: false,
         editFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid address', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
         },
-
         editForm: {
           id: '',
-          type: 'SOURCE_IP',
+          description: '',
+          portBase: 0,
+          portMax: 0,
+          type: 'UDP',
         },
-
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid address', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
         },
-
         addForm: {
           id: '',
-          type: 'SOURCE_IP',
+          description: '',
+          portBase: 0,
+          portMax: 0,
+          type: 'UDP',
         },
       };
     },
 
     methods: {
-      formatType(row, column) {
-        let result = '';
-        if (row.type === 'SOURCE_IP') {
-          result = 'Source IP';
-        } else if (row.type === 'SOURCE_NETWORK') {
-          result = 'Source Network';
-        }
-        return result;
-      },
-      handleCurrentChange(val) {
-        this.page = val;
-        this.getListeners();
+      submitFormFirewall(value) {
+        // TODO: ADD CANCEL and cancel toggle
+        this.$confirm('This will toggle Custom Firewall Rules. Are you sure?', 'prompt', {}).then(() => {
+          this.formFirewallLoading = true;
+          // NProgress.start();
+          const obj = Object.assign({}, this.formFirewall);
+          obj.id = FORM_FIREWALL_ID;
+          new FirewallProxy().create(obj).then((response) => {
+            this.formFirewallLoading = false;
+            // NProgress.done();
+            this.$message({
+              message: 'Success',
+              type: 'success',
+            });
+            this.getFirewall();
+            // disable
+            if (value === false) {
+              this.disabled = true;
+            } else {
+              this.disabled = false;
+            }
+            this.formFirewall.id = FORM_FIREWALL_ID;
+          }).catch((error) => {
+            Vue.console.error(error);
+            this.$message({
+              message: 'Error in creating record!',
+              type: 'error',
+            });
+          });
+        });
       },
 
-      getPacketRateWhitelist() {
+      handleCurrentChange(val) {
+        this.page = val;
+        this.getFirewallRules();
+      },
+      getFirewall() {
+        Vue.console.debug('getFirewall');
+        // {"where":{"id":"earl"}}
+        // filter[where][property]=value
+        // const params = {
+        //   page: this.page,
+        //   id: this.filters.id,
+        // };
+        this.formFirewallLoading = true;
+        // NProgress.start();
+        new FirewallProxy().find(this.formFirewall.id).then((response) => {
+          if (typeof response !== 'undefined'
+            && typeof response.id !== 'undefined'
+            && response.id !== 'undefined') {
+            Vue.console.debug(response);
+            this.formFirewall = Object.assign({}, response);
+            // just make sure
+            this.formFirewall.id = FORM_FIREWALL_ID;
+            this.disabled = !this.formFirewall.enabled;
+            Vue.console.debug('getFirewall: ' + this.formFirewall);
+          } else {
+            this.$refs.formFirewall.resetFields();
+            this.formFirewall.id = FORM_FIREWALL_ID;
+            Vue.console.warn('No record found.');
+            // this.sourceAddresses = [];
+          }
+          this.formFirewallLoading = false;
+          // NProgress.done();
+        });
+      },
+      getFirewallRules() {
         const params = {
           'filter[where][id]': this.filters.id,
         };
         this.listLoading = true;
         // NProgress.start();
-        new PacketRateWhitelistProxy(params).findAll().then((response) => {
+        new FirewallRulesProxy(params).findAll().then((response) => {
           if (typeof response !== 'undefined'
             && response.length > 0
             && typeof response[0].id !== 'undefined'
             && response[0].id !== 'undefined') {
             this.total = response.length;
-            this.packetRateWhitelist = response;
+            this.firewallRules = response;
           } else {
             this.total = 0;
-            this.packetRateWhitelist = [];
+            this.firewallRules = [];
           }
           this.listLoading = false;
           // NProgress.done();
@@ -165,14 +261,14 @@
           this.listLoading = true;
           // NProgress.start();
           const obj = { id: row.id };
-          new PacketRateWhitelistProxy().destroy(obj.id).then((response) => {
+          new FirewallRulesProxy().destroy(obj.id).then((response) => {
             this.listLoading = false;
             // NProgress.done();
             this.$message({
               message: 'Success',
               type: 'success',
             });
-            this.getPacketRateWhitelist();
+            this.getFirewallRules();
           });
         }).catch(() => {
 
@@ -188,7 +284,10 @@
         this.addFormVisible = true;
         this.addForm = {
           id: '',
-          type: 'SOURCE_IP',
+          description: '',
+          portBase: 0,
+          portMax: 0,
+          type: 'UDP',
         };
       },
 
@@ -199,7 +298,7 @@
               this.editLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.editForm);
-              new PacketRateWhitelistProxy().update(obj.id, obj).then((response) => {
+              new FirewallRulesProxy().update(obj.id, obj).then((response) => {
                 this.editLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -208,7 +307,7 @@
                 });
                 this.$refs.editForm.resetFields();
                 this.editFormVisible = false;
-                this.getPacketRateWhitelist();
+                this.getFirewallRules();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -228,7 +327,7 @@
               this.addLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.addForm);
-              new PacketRateWhitelistProxy().create(obj).then((response) => {
+              new FirewallRulesProxy().create(obj).then((response) => {
                 this.addLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -237,7 +336,7 @@
                 });
                 this.$refs.addForm.resetFields();
                 this.addFormVisible = false;
-                this.getPacketRateWhitelist();
+                this.getFirewallRules();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -268,14 +367,15 @@
       //         message: 'Success',
       //         type: 'success',
       //       });
-      //       this.getListeners();
+      //       this.getFirewallRules();
       //     });
       //   }).catch(() => {
       //   });
       // },
     },
     mounted() {
-      this.getPacketRateWhitelist();
+      this.getFirewall();
+      this.getFirewallRules();
     },
   };
 
