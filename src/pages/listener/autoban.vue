@@ -8,9 +8,10 @@
     <el-form-item label="Packet Rate Treshold Ban Duration">
         <el-input-number v-model="form.packetRateTresholdBanDuration" @change=""></el-input-number>
     </el-form-item>
-    <el-form-item label="Packet Rate Whitelist">
+<!--     <el-form-item label="Packet Rate Whitelist">
       <el-input v-model="form.packetRateWhitelist" type="textarea" placeholder=""></el-input>
-    </el-form-item>
+    </el-form-item> -->
+    <el-input type="hidden" v-model="form.packetRateWhitelist"></el-input>
     <el-form-item label="Execute On Ban Script">
       <input type="file" ref="executeOnBan" :name="executeOnBan"
       accept=".sh" @change="filesChange('executeOnBan', $event)">
@@ -70,6 +71,7 @@
             this.form = Object.assign({}, response);
             // just make sure
             this.form.id = 'autoban';
+            Vue.console.log('packetRateWhitelist: ' + this.form.packetRateWhitelist);
             Vue.console.debug(this.form);
           } else {
             this.$refs.form.resetFields();

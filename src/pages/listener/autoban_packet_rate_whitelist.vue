@@ -3,29 +3,27 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.id" placeholder="Prefix"></el-input>
+          <el-input v-model="filters.id" placeholder="Address"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getChannelLimits">Search</el-button>
+          <el-button type="primary" v-on:click="getPacketRateWhitelist">Search</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAdd">New</el-button>
         </el-form-item>
       </el-form>
     </el-col>
-    <el-table :data="channelLimits" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+    <el-table :data="packetRateWhitelist" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
       <el-table-column type="selection" width="55">
       </el-table-column>
       <!--
       <el-table-column type="index" width="20">
       </el-table-column>
       -->
-      <el-table-column prop="id" label="Prefix" width="200" sortable>
+      <el-table-column prop="id" label="Address" width="200" sortable>
       </el-table-column>
       </el-table-column>
-        <el-table-column prop="enabled" label="Enabled" width="200" sortable>
-      </el-table-column>
-      <el-table-column prop="maxChannels" label="Max Channels" width="300" sortable>
+        <el-table-column prop="type" label="Type" :formatter="formatType" width="200" sortable>
       </el-table-column>
 
       <el-table-column label="Actions">
@@ -43,20 +41,14 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="Prefix" prop="id">
-          <el-input v-model="editForm.id" :disabled="true"></el-input>
+        <el-form-item label="Address" prop="id">
+          <el-input v-model="editForm.id"></el-input>
         </el-form-item>
-        <el-form-item label="Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="editForm.enabled"
-              on-color="#13ce66"
-              off-color="#ff4949">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="Max Channels">
-          <el-input-number v-model="editForm.maxChannels" :min="0"></el-input-number>
+        <el-form-item label="Type">
+          <el-radio-group v-model="editForm.type" size="small">
+            <el-radio-button label="SOURCE_IP" border>IP Address</el-radio-button>
+            <el-radio-button label="SOURCE_NETWORK" border>Network</el-radio-button>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -67,22 +59,14 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="Prefix" prop="id">
+        <el-form-item label="Address" prop="id">
           <el-input v-model="addForm.id" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
-            <el-switch
-              v-model="addForm.enabled"
-              on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
-            </el-switch>
-          </el-tooltip>
-        </el-form-item>
-        <el-form-item label="Max Channels">
-          <el-input-number v-model="addForm.maxChannels" :min="0"></el-input-number>
+        <el-form-item label="Type">
+          <el-radio-group v-model="addForm.type" size="small">
+            <el-radio-button label="SOURCE_IP" border>IP Address</el-radio-button>
+            <el-radio-button label="SOURCE_NETWORK" border>Network</el-radio-button>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -96,7 +80,7 @@
 <script>
   import Vue from 'vue';
   import util from '@/common/js/util';
-  import ChannelLimitsProxy from '@/proxies/ChannelLimitsProxy';
+  import PacketRateWhitelistProxy from '@/proxies/PacketRateWhitelistProxy';
 
   export default {
 
@@ -105,7 +89,7 @@
         filters: {
           id: '',
         },
-        channelLimits: [],
+        packetRateWhitelist: [],
         total: 0,
         page: 1,
         listLoading: false,
@@ -114,54 +98,61 @@
         editLoading: false,
         editFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid address', trigger: 'blur' },
           ],
         },
 
         editForm: {
-          id: '001',
-          enabled: true,
-          maxChannels: '0',
+          id: '',
+          type: 'SOURCE_IP',
         },
 
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid address', trigger: 'blur' },
           ],
         },
 
         addForm: {
           id: '',
-          enabled: true,
-          maxChannels: 30,
+          type: 'SOURCE_IP',
         },
       };
     },
 
     methods: {
+      formatType(row, column) {
+        let result = '';
+        if (row.type === 'SOURCE_IP') {
+          result = 'Source IP';
+        } else if (row.type === 'SOURCE_NETWORK') {
+          result = 'Source Network';
+        }
+        return result;
+      },
       handleCurrentChange(val) {
         this.page = val;
         this.getListeners();
       },
 
-      getChannelLimits() {
+      getPacketRateWhitelist() {
         const params = {
           'filter[where][id]': this.filters.id,
         };
         this.listLoading = true;
         // NProgress.start();
-        new ChannelLimitsProxy(params).findAll().then((response) => {
+        new PacketRateWhitelistProxy(params).findAll().then((response) => {
           if (typeof response !== 'undefined'
             && response.length > 0
             && typeof response[0].id !== 'undefined'
             && response[0].id !== 'undefined') {
             this.total = response.length;
-            this.channelLimits = response;
+            this.packetRateWhitelist = response;
           } else {
             this.total = 0;
-            this.channelLimits = [];
+            this.packetRateWhitelist = [];
           }
           this.listLoading = false;
           // NProgress.done();
@@ -175,14 +166,14 @@
           this.listLoading = true;
           // NProgress.start();
           const obj = { id: row.id };
-          new ChannelLimitsProxy().destroy(obj.id).then((response) => {
+          new PacketRateWhitelistProxy().destroy(obj.id).then((response) => {
             this.listLoading = false;
             // NProgress.done();
             this.$message({
               message: 'Success',
               type: 'success',
             });
-            this.getChannelLimits();
+            this.getPacketRateWhitelist();
           });
         }).catch(() => {
 
@@ -198,8 +189,7 @@
         this.addFormVisible = true;
         this.addForm = {
           id: '',
-          enabled: false,
-          maxChannels: 30,
+          type: 'SOURCE_IP',
         };
       },
 
@@ -210,7 +200,7 @@
               this.editLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.editForm);
-              new ChannelLimitsProxy().update(obj.id, obj).then((response) => {
+              new PacketRateWhitelistProxy().update(obj.id, obj).then((response) => {
                 this.editLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -219,7 +209,7 @@
                 });
                 this.$refs.editForm.resetFields();
                 this.editFormVisible = false;
-                this.getChannelLimits();
+                this.getPacketRateWhitelist();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -239,7 +229,7 @@
               this.addLoading = true;
               // NProgress.start();
               const obj = Object.assign({}, this.addForm);
-              new ChannelLimitsProxy().create(obj).then((response) => {
+              new PacketRateWhitelistProxy().create(obj).then((response) => {
                 this.addLoading = false;
                 // NProgress.done();
                 this.$message({
@@ -248,7 +238,7 @@
                 });
                 this.$refs.addForm.resetFields();
                 this.addFormVisible = false;
-                this.getChannelLimits();
+                this.getPacketRateWhitelist();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -286,7 +276,7 @@
       // },
     },
     mounted() {
-      this.getChannelLimits();
+      this.getPacketRateWhitelist();
     },
   };
 

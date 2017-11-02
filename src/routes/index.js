@@ -34,6 +34,7 @@ export default [
         { path: '/carp-ha-interface', component: require('@/pages/listener/carp_ha_interface.vue'), name: 'CARP HA Interface' },
         { path: '/tls', component: require('@/pages/listener/tls.vue'), name: 'TLS' },
         { path: '/autoban', component: require('@/pages/listener/autoban.vue'), name: 'Autoban' },
+        { path: '/autoban-packet-rate-whitelist', component: require('@/pages/listener/autoban_packet_rate_whitelist.vue'), name: 'Packet Rate Whitelist' },
         { path: '/port-ranges', component: require('@/pages/listener/port_ranges.vue'), name: 'Port Ranges' },
     ],
     // If the user needs to be authenticated to view this page

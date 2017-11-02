@@ -24,26 +24,19 @@
             disabled></el-input>
         </el-form-item>
         <el-form-item label="Source IP Address" prop="sourceAddress">
-          <!-- <el-input v-model="form.sourceAddress" auto-complete="off"></el-input> -->
-          <el-select v-model="sourceAddress" clearable placeholder="Select"
+          <el-select v-model="sourceAddress" placeholder="Select"
           :loading='sourceAddressLoading' @change='assignListenerValuesToForm'
           :disabled="disabled">
             <el-option
               v-for="item in sourceAddresses"
               :key="item.id"
-              :label="item.description"
-              :value="item.id">
+              :label="item.ipAddress + ':' + item.description"
+              :value="item.ipAddress">
             </el-option>
           </el-select>
         </el-form-item>
         <el-input type="hidden" v-model="form.upScript"></el-input>
         <el-input type="hidden" v-model="form.downScript"></el-input>
-        <!-- <el-form-item label="Up Script">
-          <el-input type="textarea" v-model="form.upScript"></el-input>
-        </el-form-item>
-        <el-form-item label="Down Script">
-          <el-input type="textarea" v-model="form.downScript"></el-input>
-        </el-form-item> -->
         <el-form-item label="CARP Password" prop="carpPassword">
           <el-input type="password" v-model="form.carpPassword" auto-complete="off"
           :disabled="disabled"></el-input>
@@ -148,11 +141,24 @@
   import CarpHaInterfaceProxy from '@/proxies/CarpHaInterfaceProxy';
   import InterfaceProxy from '@/proxies/InterfaceProxy';
 
+  const FORM_ID = 'carp_ha_interface';
   export default {
     data() {
+      const checkVirtualIpAddress = ((rule, value, callback) => {
+        let result = '';
+        if (!value) {
+          result = callback(new Error('Please input the Virtual IP Address'));
+        }
+        if (this.form.sourceAddress === value) {
+          result = callback(new Error('Virtual IP Address conflict with Source IP Address!'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
       return {
         form: {
-          id: 'carp_ha_interface',
+          id: FORM_ID,
           enabled: false,
           virtualIpAddress: '',
           interfaceName: '',
@@ -179,13 +185,13 @@
         sourceAddresses: [],
         formRules: {
           virtualIpAddress: [
-          { required: true, message: 'Please enter a valid Virtual IP Address', trigger: 'blur' },
+          { validator: checkVirtualIpAddress, trigger: 'blur' },
           ],
           description: [
           { required: true, message: 'Please enter a valid description', trigger: 'blur' },
           ],
           sourceAddress: [
-          { required: true, message: 'Please select a valid Source Address', trigger: 'blur' },
+          { required: true, message: 'Please select a Source IP Address', trigger: 'blur' },
           ],
           carpPassword: [
           { required: true, message: 'Please enter a valid password', trigger: 'blur' },
@@ -217,11 +223,12 @@
             Vue.console.debug(response);
             this.form = Object.assign({}, response);
             // just make sure
-            this.form.id = 'carp_ha_interface';
+            this.form.id = FORM_ID;
+            this.disabled = !this.form.enabled;
             Vue.console.debug('getCarpHaInterface: ' + this.form);
           } else {
             this.$refs.form.resetFields();
-            this.form.id = 'carp_ha_interface';
+            this.form.id = FORM_ID;
             Vue.console.warn('No record found.');
             // this.sourceAddresses = [];
           }
@@ -245,50 +252,54 @@
           // NProgress.done();
         });
       },
-      assignListenerValuesToForm(listenerId) {
-        Vue.console.log('listener: ' + listenerId);
+      assignListenerValuesToForm(listenerIp) {
+        Vue.console.log('listener: ' + listenerIp);
         Vue.console.log('form: ' + this.form);
-        const selectedListener = this.sourceAddresses.find(item => item.id === listenerId);
+        const selectedListener = this.sourceAddresses.find(item => item.ipAddress === listenerIp);
         Vue.console.log('listener selected: ' + selectedListener);
         this.form = Object.assign({}, selectedListener);
+        this.sourceAddress = selectedListener.ipAddress;
+        this.form.sourceAddress = selectedListener.ipAddress;
         // just make sure
-        this.form.id = 'carp_ha_interface';
+        this.form.id = FORM_ID;
         this.form.enabled = true;
         Vue.console.log('form: ' + this.form);
       },
+      resetForm() {
+        this.form = {
+          id: FORM_ID,
+          enabled: false,
+          virtualIpAddress: '',
+          interfaceName: '',
+          description: '',
+          sourceAddress: '',
+          upScript: '',
+          downScript: '',
+          carpPassword: '',
+          vhid: '',
+          preferredMaster: false,
+          externalAddress: '',
+          tcpEnabled: false,
+          udpEnabled: false,
+          wsEnabled: false,
+          wssEnabled: false,
+          tlsEnabled: false,
+          sipPort: '',
+          tlsPort: '',
+          wsPort: '',
+          wssPort: '',
+          subnets: '',
+        };
+      },
       resetFieldsIfOff(value) {
+        this.$refs.form.resetFields();
         if (value === false) {
-          this.$refs.form.resetFields();
-          this.form = {
-            id: 'carp_ha_interface',
-            enabled: false,
-            virtualIpAddress: '',
-            interfaceName: '',
-            description: '',
-            sourceAddress: '',
-            upScript: '',
-            downScript: '',
-            carpPassword: '',
-            vhid: '',
-            preferredMaster: false,
-            externalAddress: '',
-            tcpEnabled: false,
-            udpEnabled: false,
-            wsEnabled: false,
-            wssEnabled: false,
-            tlsEnabled: false,
-            sipPort: '',
-            tlsPort: '',
-            wsPort: '',
-            wssPort: '',
-            subnets: '',
-          };
+          this.resetForm();
           this.disabled = true;
         } else {
           this.disabled = false;
-          this.$refs.form.clearValidate();
         }
-        this.form.id = 'carp_ha_interface';
+        this.form.id = FORM_ID;
       },
       shouldValidateFields() {
         return this.form.enabled === true;
@@ -298,7 +309,7 @@
           this.formLoading = true;
           // NProgress.start();
           const obj = Object.assign({}, this.form);
-          obj.id = 'carp_ha_interface';
+          obj.id = FORM_ID;
           new CarpHaInterfaceProxy().create(obj).then((response) => {
             this.formLoading = false;
             // NProgress.done();
@@ -321,13 +332,14 @@
           Vue.console.log('onSubmit! ' + this.form.enabled);
           this.$refs.form.resetFields();
           this.submitForm();
+        } else {
+          this.$refs.form.validate((valid) => {
+            Vue.console.log('onSubmit!');
+            if (valid) {
+              this.submitForm();
+            }
+          });
         }
-        this.$refs.form.validate((valid) => {
-          Vue.console.log('onSubmit!');
-          if (valid) {
-            this.submitForm();
-          }
-        });
       },
     },
     mounted() {

@@ -18,12 +18,15 @@ export default class AutobanTransformer extends Transformer {
    * @returns {Object} The transformed object
    */
   static fetch(object) {
+    Vue.console.log('AutobanTransformer::packet_rate_white_list: '
+      + object.packet_rate_white_list);
+    // parse packet rate white list
     return {
       id: object.id,
       packetRateMinTreshold: object.packet_rate_min_treshold,
       packetRateMaxTreshold: object.packet_rate_max_treshold,
       packetRateTresholdBanDuration: object.packet_rate_treshold_ban_duration,
-      packetRateWhiteList: object.packet_rate_white_list,
+      packetRateWhitelist: object.packet_rate_white_list,
       executeOnBan: object.execute_on_ban,
       autoNullRouteOnBan: object.auto_null_route_on_ban,
     };
@@ -37,12 +40,14 @@ export default class AutobanTransformer extends Transformer {
    * @returns {Object} The transformed object
    */
   static send(object) {
+    Vue.console.log('AutobanTransformer::packetRateWhitelist: '
+      + object.packetRateWhitelist);
     return {
       id: object.id,
       packet_rate_min_treshold: object.packetRateMinTreshold,
       packet_rate_max_treshold: object.packetRateMaxTreshold,
       packet_rate_treshold_ban_duration: object.packetRateTresholdBanDuration,
-      packet_rate_white_list: object.packetRateWhiteList,
+      packet_rate_white_list: object.packetRateWhitelist,
       execute_on_ban: object.executeOnBan,
       auto_null_route_on_ban: object.autoNullRouteOnBan,
     };
