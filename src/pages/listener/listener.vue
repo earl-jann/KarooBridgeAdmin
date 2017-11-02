@@ -16,10 +16,6 @@
     <el-table :data="listeners" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
       <el-table-column type="selection" width="55">
       </el-table-column>
-      <!--
-      <el-table-column type="index" width="20">
-      </el-table-column>
-      -->
       <el-table-column prop="id" label="Name" width="300" sortable>
       </el-table-column>
       </el-table-column>
@@ -29,23 +25,7 @@
       </el-table-column>
       <el-table-column prop="externalAddress" label="Ext Address" width="150" sortable>
       </el-table-column>
-      <!--
-      <el-table-column prop="tcp_enabled" label="TCP" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="udp_enabled" label="UDP" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="ws_enabled" label="WS" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="tls_enabled" label="TLS" width="80" :formatter="formatBoolean" sortable>
-      </el-table-column>
-      <el-table-column prop="sip_port" label="SIP Port" width="100" sortable>
-      </el-table-column>
-      <el-table-column prop="tls_port" label="TLS Port" width="100" sortable>
-      </el-table-column>
-      <el-table-column prop="subnets" label="Subnets" min-width="180" sortable>
-      </el-table-column>
-      -->
-      <el-table-column label="Actions" width="150">
+      <el-table-column label="Actions">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">Delete</el-button>
@@ -110,6 +90,15 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
+        <el-form-item label="Secure Websocket Enabled">
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="editForm.wssEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949">
+            </el-switch>
+          </el-tooltip>
+        </el-form-item>
         <el-form-item label="TLS Enabled">
           <el-tooltip :content="'Toggle to enable/disable'" placement="top">
             <el-switch
@@ -124,6 +113,12 @@
         </el-form-item>
         <el-form-item label="TLS Port">
           <el-input-number v-model="editForm.tlsPort" :min="0" :max="200000"></el-input-number>
+        </el-form-item>
+        <el-form-item label="WS Port">
+          <el-input-number v-model="editForm.wsPort" :min="0" :max="200000"></el-input-number>
+        </el-form-item>
+        <el-form-item label="WSS Port">
+          <el-input-number v-model="editForm.wssPort" :min="0" :max="200000"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
           <el-input type="textarea" v-model="editForm.subnets"></el-input>
@@ -174,9 +169,7 @@
             <el-switch
               v-model="addForm.udpEnabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -189,14 +182,21 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
+        <el-form-item label="Secure Websocket Enabled">
+          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+            <el-switch
+              v-model="addForm.wssEnabled"
+              on-color="#13ce66"
+              off-color="#ff4949">
+            </el-switch>
+          </el-tooltip>
+        </el-form-item>
         <el-form-item label="TLS Enabled">
           <el-tooltip :content="'Toggle to enable/disable'" placement="top">
             <el-switch
               v-model="addForm.tlsEnabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -205,6 +205,12 @@
         </el-form-item>
         <el-form-item label="TLS Port">
           <el-input-number v-model="addForm.tlsPort" :min="0" :max="200000"></el-input-number>
+        </el-form-item>
+        <el-form-item label="WS Port">
+          <el-input-number v-model="addForm.wsPort" :min="0" :max="200000"></el-input-number>
+        </el-form-item>
+        <el-form-item label="WSS Port">
+          <el-input-number v-model="addForm.wssPort" :min="0" :max="200000"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
           <el-input type="textarea" v-model="addForm.subnets"></el-input>
@@ -249,12 +255,15 @@
           ipAddress: '',
           default: false,
           externalAddress: '',
-          tcpEnabled: true,
-          udpEnabled: true,
-          wsEnabled: true,
+          tcpEnabled: false,
+          udpEnabled: false,
+          wsEnabled: false,
+          wssEnabled: false,
           tlsEnabled: false,
-          sipPort: '0',
-          tlsPort: '0',
+          sipPort: '',
+          tlsPort: '',
+          wsPort: '',
+          wssPort: '',
           subnets: '',
         },
 
@@ -264,6 +273,9 @@
           id: [
           { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
+          externalAddress: [
+          { required: true, message: 'Please enter a valid external address', trigger: 'blur' },
+          ],
         },
 
         addForm: {
@@ -272,12 +284,15 @@
           ipAddress: '',
           default: false,
           externalAddress: '',
-          tcpEnabled: true,
-          udpEnabled: true,
-          wsEnabled: true,
+          tcpEnabled: false,
+          udpEnabled: false,
+          wsEnabled: false,
+          wssEnabled: false,
           tlsEnabled: false,
-          sipPort: '0',
-          tlsPort: '0',
+          sipPort: '',
+          tlsPort: '',
+          wsPort: '',
+          wssPort: '',
           subnets: '',
         },
       };
@@ -355,9 +370,12 @@
           tcpEnabled: false,
           udpEnabled: false,
           wsEnabled: false,
+          wssEnabled: false,
           tlsEnabled: false,
-          sipPort: '0',
-          tlsPort: '0',
+          sipPort: '',
+          tlsPort: '',
+          wsPort: '',
+          wssPort: '',
           subnets: '',
         };
       },
@@ -408,6 +426,7 @@
                   message: 'Error in creating record!',
                   type: 'error',
                 });
+                this.addLoading = false;
               });
             });
           }

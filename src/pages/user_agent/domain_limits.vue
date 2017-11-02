@@ -28,7 +28,7 @@
       <el-table-column prop="maxChannels" label="Max Channels" width="300" sortable>
       </el-table-column>
 
-      <el-table-column label="Actions" width="150">
+      <el-table-column label="Actions">
         <template scope="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">Delete</el-button>
