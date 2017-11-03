@@ -1,6 +1,6 @@
 <template>
   <section>
-  <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form ref="formFirewall" :inline="true" :model="formFirewall" v-loading="formFirewallLoading">
         <el-input type="hidden" v-model="formFirewall.id"></el-input>
         <el-form-item label="Enabled">
@@ -12,6 +12,8 @@
               @change='submitFormFirewall'>
             </el-switch>
           </el-tooltip>
+          <i class="el-icon-information"> </i>
+          <em>{{ $t('firewall.header') }}</em>
         </el-form-item>
       </el-form>
     </el-col>
@@ -195,6 +197,9 @@
               type: 'error',
             });
           });
+        }).catch((error) => {
+          // cancel the switch
+          this.formFirewall.enabled = !value;
         });
       },
 

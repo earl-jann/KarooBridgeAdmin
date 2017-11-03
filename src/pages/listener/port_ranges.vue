@@ -9,6 +9,10 @@
         <el-input-number v-model="form.rtpProxyPortBase" @change=""></el-input-number>
         <el-input-number v-model="form.rtpProxyPortMax" @change=""></el-input-number>
     </el-form-item>
+    <el-form-item label="Transcoder Port Range">
+        <el-input-number v-model="form.transcoderPortBase" @change=""></el-input-number>
+        <el-input-number v-model="form.transcoderPortMax" @change=""></el-input-number>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click.native="onSubmit">Submit</el-button>
     </el-form-item>
@@ -29,6 +33,8 @@
           sipTcpPortMax: 0,
           rtpProxyPortBase: 0,
           rtpProxyPortMax: 0,
+          transcoderPortBase: 0,
+          transcoderPortMax: 0,
         },
         formRules: {
           sipTcpPortBase: [

@@ -1,0 +1,23 @@
+{
+ "header": "Karoo Bridge supports HA using CARP. This requires an additional HA license purchased from OSS Software Solutions. For inquiries, send an email to info@ossapp.com",
+ "enabled": "Set this to true to enable UCARP virtual interface",
+ "virtual_ip_address": "Virtual IP address and subnet to be used by CARP",
+ "interface_name": "The name of the network interface where the virtual ip will be added",
+ "src_address": "Real IP Address of the host",
+ "up_script": "Script executed to register the virtual IP",
+ "down_script": "Script executed to remove the virtual IP",
+ "carp_password": "Secret key used by CARP subsystem.  Maximum 16 characters",
+ "vhid": "1-255 VHID used for CARP advertisements",
+ "preferred_master": "Set this to true if you want to make this instance as the preferred master",
+ "external_address": "(Optional) External IP address if the virtual IP is behind a port mapped firewall",
+ "tcp_enabled": "Enable TCP transport",
+ "udp_enabled": "Enable UDP transport",
+ "ws_enabled": "Enable WS transport",
+ "wss_enabled": "Enable Secure Websocket Transport",
+ "tls_enabled": "Enable TLS transport",
+ "sip_port": "Port for TCP and UDP",
+ "tls_port": "Port for TLS",
+ "ws_port": "Port for Websocket",
+ "wss_port": "Port for Secure Websocket",
+ "subnets": "(Optional) Comma delimited subnets reachable by this transport"
+}

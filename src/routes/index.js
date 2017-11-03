@@ -27,7 +27,7 @@ export default [
     path: '/home',
     component: require('@/pages/Home.vue'),
     name: 'Listener',
-    iconCls: 'el-icon-setting',
+    iconClass: 'el-icon-setting',
     children: [
         { path: '/main', component: require('@/pages/Main.vue'), name: 'Main', hidden: true },
         { path: '/interface', component: require('@/pages/listener/listener.vue'), name: 'Interfaces' },
@@ -47,7 +47,7 @@ export default [
     path: '/home',
     component: require('@/pages/Home.vue'),
     name: 'User Agent',
-    iconCls: 'el-icon-setting',
+    iconClass: 'el-icon-setting',
     children: [
         { path: '/user-agent', component: require('@/pages/user_agent/user_agent.vue'), name: 'User Agent' },
         { path: '/channel-limits', component: require('@/pages/user_agent/channel_limits.vue'), name: 'Channel Limits' },
@@ -62,7 +62,7 @@ export default [
     path: '/home',
     component: require('@/pages/Home.vue'),
     name: 'SIP Capture',
-    iconCls: 'el-icon-setting',
+    iconClass: 'el-icon-setting',
     children: [
         { path: '/homer', component: require('@/pages/sipcapture/homer.vue'), name: 'Homer' },
         { path: '/voipmonitor', component: require('@/pages/sipcapture/voipmonitor.vue'), name: 'Voip Monitor' },
