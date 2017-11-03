@@ -31,12 +31,6 @@
       </el-form>
     </el-col>
     <el-table :data="firewallRules" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-<!--       <el-table-column type="selection" width="55" >
-      </el-table-column> -->
-      <!--
-      <el-table-column type="index" width="20">
-      </el-table-column>
-      -->
       <el-table-column prop="id" label="Name" width="200" :sortable="!disabled">
       </el-table-column>
       <el-table-column prop="portBase" label="Port Number" width="200" :sortable="!disabled">
@@ -67,9 +61,11 @@
         <el-form-item label="Description" prop="description">
           <el-input v-model="editForm.description"></el-input>
         </el-form-item>
-        <el-form-item label="Port Range">
-          <el-input-number v-model="editForm.portBase" @change=""></el-input-number>
-          <el-input-number v-model="editForm.portMax" @change=""></el-input-number>
+        <el-form-item label="Minimum Port Range" prop="portBase">
+          <el-input-number v-model="editForm.portBase" :min="1" :max="65535" @change=""></el-input-number>
+        </el-form-item>
+        <el-form-item label="Maximum Port Range" prop="portMax">
+          <el-input-number v-model="editForm.portMax" :min="1" :max="65535" @change=""></el-input-number>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="editForm.type" size="small">
@@ -92,9 +88,11 @@
         <el-form-item label="Description" prop="description">
           <el-input v-model="addForm.description"></el-input>
         </el-form-item>
-        <el-form-item label="Port Range">
-          <el-input-number v-model="addForm.portBase" @change=""></el-input-number>
-          <el-input-number v-model="addForm.portMax" @change=""></el-input-number>
+        <el-form-item label="Minimum Port Range" prop="portBase">
+          <el-input-number v-model="addForm.portBase" :min="1" :max="65535" @change=""></el-input-number>
+        </el-form-item>
+        <el-form-item label="Maximum Port Range" prop="portMax">
+          <el-input-number v-model="addForm.portMax" :min="1" :max="65535" @change=""></el-input-number>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="addForm.type" size="small">
@@ -121,6 +119,19 @@
 
   export default {
     data() {
+      const checkPortMaxRange = ((rule, value, callback) => {
+        let result = '';
+        if (!value) {
+          result = callback(new Error('Please input the Max Port Range!'));
+        }
+        if (this.editForm.portBase > value
+          || this.addForm.portBase > value) {
+          result = callback(new Error('Maximum Port should be greater than or equal to Minimum Port!'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
       return {
         formFirewall: {
           id: FORM_FIREWALL_ID,
@@ -139,6 +150,9 @@
         editFormVisible: false,
         editLoading: false,
         editFormRules: {
+          portMax: [
+          { validator: checkPortMaxRange, trigger: 'blur' },
+          ],
           id: [
           { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
@@ -153,6 +167,9 @@
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
+          portMax: [
+          { validator: checkPortMaxRange, trigger: 'blur' },
+          ],
           id: [
           { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
@@ -209,12 +226,6 @@
       },
       getFirewall() {
         Vue.console.debug('getFirewall');
-        // {"where":{"id":"earl"}}
-        // filter[where][property]=value
-        // const params = {
-        //   page: this.page,
-        //   id: this.filters.id,
-        // };
         this.formFirewallLoading = true;
         // NProgress.start();
         new FirewallProxy().find(this.formFirewall.id).then((response) => {
@@ -350,33 +361,15 @@
                 });
               });
             });
+          } else {
+            // stub
+            // Vue.console.error('Invalidate');
           }
         });
       },
       selsChange(sels) {
         this.sels = sels;
       },
-      // no longer used
-      // batchRemove() {
-      //   const names = this.sels.map(item => item.name).toString();
-      //   this.$confirm('Delete the selected records?', 'prompt', {
-      //     type: 'warning',
-      //   }).then(() => {
-      //     this.listLoading = true;
-      //     // NProgress.start();
-      //     const params = { names };
-      //     listenerService.batchRemoveListener(params).then((res) => {
-      //       this.listLoading = false;
-      //       // NProgress.done();
-      //       this.$message({
-      //         message: 'Success',
-      //         type: 'success',
-      //       });
-      //       this.getFirewallRules();
-      //     });
-      //   }).catch(() => {
-      //   });
-      // },
     },
     mounted() {
       this.getFirewall();
