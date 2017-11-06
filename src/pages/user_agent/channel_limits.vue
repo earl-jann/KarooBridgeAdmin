@@ -6,7 +6,7 @@
           <el-input v-model="filters.id" placeholder="Prefix"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" v-on:click="getChannelLimits">Search</el-button>
+          <el-button type="primary" v-on:click="getObjects">Search</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleAdd">New</el-button>
@@ -23,7 +23,8 @@
       <el-table-column prop="id" label="Prefix" width="200" sortable>
       </el-table-column>
       </el-table-column>
-        <el-table-column prop="enabled" label="Enabled" width="200" sortable>
+        <el-table-column prop="enabled" label="Enabled" width="200"
+          :formatter="formatBoolean" sortable>
       </el-table-column>
       <el-table-column prop="maxChannels" label="Max Channels" width="300" sortable>
       </el-table-column>
@@ -75,9 +76,7 @@
             <el-switch
               v-model="addForm.enabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -143,10 +142,14 @@
     methods: {
       handleCurrentChange(val) {
         this.page = val;
-        this.getListeners();
+        this.getObjects();
       },
 
-      getChannelLimits() {
+      formatBoolean(row, column, value) {
+        return value === true ? 'Yes' : 'No';
+      },
+
+      getObjects() {
         const params = {
           'filter[where][id]': this.filters.id,
         };
@@ -182,7 +185,7 @@
               message: 'Success',
               type: 'success',
             });
-            this.getChannelLimits();
+            this.getObjects();
           });
         }).catch(() => {
 
@@ -219,7 +222,7 @@
                 });
                 this.$refs.editForm.resetFields();
                 this.editFormVisible = false;
-                this.getChannelLimits();
+                this.getObjects();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -248,7 +251,7 @@
                 });
                 this.$refs.addForm.resetFields();
                 this.addFormVisible = false;
-                this.getChannelLimits();
+                this.getObjects();
               }).catch((error) => {
                 Vue.console.error(error);
                 this.$message({
@@ -279,14 +282,14 @@
       //         message: 'Success',
       //         type: 'success',
       //       });
-      //       this.getListeners();
+      //       this.getObjects();
       //     });
       //   }).catch(() => {
       //   });
       // },
     },
     mounted() {
-      this.getChannelLimits();
+      this.getObjects();
     },
   };
 

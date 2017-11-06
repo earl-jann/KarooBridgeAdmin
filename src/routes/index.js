@@ -27,7 +27,7 @@ export default [
     path: '/home',
     component: require('@/pages/Home.vue'),
     name: 'Listener',
-    iconCls: 'el-icon-setting',
+    iconClass: 'el-icon-setting',
     children: [
         { path: '/main', component: require('@/pages/Main.vue'), name: 'Main', hidden: true },
         { path: '/interface', component: require('@/pages/listener/listener.vue'), name: 'Interfaces' },
@@ -35,6 +35,7 @@ export default [
         { path: '/tls', component: require('@/pages/listener/tls.vue'), name: 'TLS' },
         { path: '/autoban', component: require('@/pages/listener/autoban.vue'), name: 'Autoban' },
         { path: '/autoban-packet-rate-whitelist', component: require('@/pages/listener/autoban_packet_rate_whitelist.vue'), name: 'Packet Rate Whitelist' },
+        { path: '/firewall-rules', component: require('@/pages/listener/firewall_rules.vue'), name: 'Firewall Rules' },
         { path: '/port-ranges', component: require('@/pages/listener/port_ranges.vue'), name: 'Port Ranges' },
     ],
     // If the user needs to be authenticated to view this page
@@ -46,7 +47,7 @@ export default [
     path: '/home',
     component: require('@/pages/Home.vue'),
     name: 'User Agent',
-    iconCls: 'el-icon-setting',
+    iconClass: 'el-icon-setting',
     children: [
         { path: '/user-agent', component: require('@/pages/user_agent/user_agent.vue'), name: 'User Agent' },
         { path: '/channel-limits', component: require('@/pages/user_agent/channel_limits.vue'), name: 'Channel Limits' },
@@ -61,7 +62,7 @@ export default [
     path: '/home',
     component: require('@/pages/Home.vue'),
     name: 'SIP Capture',
-    iconCls: 'el-icon-setting',
+    iconClass: 'el-icon-setting',
     children: [
         { path: '/homer', component: require('@/pages/sipcapture/homer.vue'), name: 'Homer' },
         { path: '/voipmonitor', component: require('@/pages/sipcapture/voipmonitor.vue'), name: 'Voip Monitor' },

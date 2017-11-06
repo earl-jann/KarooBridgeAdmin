@@ -22,8 +22,7 @@
       -->
       <el-table-column prop="id" label="Address" width="200" sortable>
       </el-table-column>
-      </el-table-column>
-        <el-table-column prop="type" label="Type" :formatter="formatType" width="200" sortable>
+      <el-table-column prop="type" label="Type" :formatter="formatType" width="200" sortable>
       </el-table-column>
 
       <el-table-column label="Actions">
@@ -42,7 +41,7 @@
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
         <el-form-item label="Address" prop="id">
-          <el-input v-model="editForm.id"></el-input>
+          <el-input v-model="editForm.id" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="editForm.type" size="small">

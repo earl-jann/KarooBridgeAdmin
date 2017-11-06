@@ -1,14 +1,43 @@
 <template>
 	<el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;" :rules="formRules" v-loading="formLoading">
     <el-input type="hidden" v-model="form.id"></el-input>
-    <el-form-item label="SIP TCP Port Range">
-        <el-input-number v-model="form.sipTcpPortBase" @change=""></el-input-number>
-        <el-input-number v-model="form.sipTcpPortMax" @change=""></el-input-number>
+    <el-form-item label="SIP TCP Port Range" prop="sipTcpPortMax">
+      <div class="input-inline">
+          <el-form-item prop="sipTcpPortBase">
+            <el-input-number v-model="form.sipTcpPortBase" :min="1" :max="65535" @change=""></el-input-number>
+          </el-form-item>
+        </div>
+        <div class="input-inline">
+          <el-form-item>
+            <el-input-number v-model="form.sipTcpPortMax" :min="1" :max="65535" @change=""></el-input-number>
+          </el-form-item>
+      </div>
     </el-form-item>
-    <el-form-item label="RTP Proxy Port Range">
-        <el-input-number v-model="form.rtpProxyPortBase" @change=""></el-input-number>
-        <el-input-number v-model="form.rtpProxyPortMax" @change=""></el-input-number>
+    <el-form-item label="RTP Proxy Port Range" prop="rtpProxyPortMax">
+      <div class="input-inline">
+          <el-form-item prop="rtpProxyPortBase">
+            <el-input-number v-model="form.rtpProxyPortBase" :min="1" :max="65535" @change=""></el-input-number>
+          </el-form-item>
+        </div>
+        <div class="input-inline">
+          <el-form-item>
+            <el-input-number v-model="form.rtpProxyPortMax" :min="1" :max="65535" @change=""></el-input-number>
+          </el-form-item>
+      </div>
     </el-form-item>
+    <el-form-item label="Transcoder Port Range" prop="transcoderPortMax">
+      <div class="input-inline">
+          <el-form-item prop="transcoderPortBase">
+            <el-input-number v-model="form.transcoderPortBase" :min="1" :max="65535" @change=""></el-input-number>
+          </el-form-item>
+        </div>
+        <div class="input-inline">
+          <el-form-item>
+            <el-input-number v-model="form.transcoderPortMax" :min="1" :max="65535" @change=""></el-input-number>
+          </el-form-item>
+      </div>
+    </el-form-item>
+
     <el-form-item>
       <el-button type="primary" @click.native="onSubmit">Submit</el-button>
     </el-form-item>
@@ -22,6 +51,45 @@
 
   export default {
     data() {
+      const checkSipTcpPortMaxRange = ((rule, value, callback) => {
+        let result = '';
+        if (!value) {
+          result = callback(new Error('Please input the Max Port Range!'));
+        }
+        if (this.form.sipTcpPortBase > value) {
+          result = callback(new Error('Maximum Port should be greater than or equal to Minimum Port!'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
+
+      const checkRtpProxyPortMaxRange = ((rule, value, callback) => {
+        let result = '';
+        if (!value) {
+          result = callback(new Error('Please input the Max Port Range!'));
+        }
+        if (this.form.rtpProxyPortBase > value) {
+          result = callback(new Error('Maximum Port should be greater than or equal to Minimum Port!'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
+
+      const checkTranscoderPortMaxRange = ((rule, value, callback) => {
+        let result = '';
+        if (!value) {
+          result = callback(new Error('Please input the Max Port Range!'));
+        }
+        if (this.form.transcoderPortBase > value) {
+          result = callback(new Error('Maximum Port should be greater than or equal to Minimum Port!'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
+
       return {
         form: {
           id: 'port_ranges',
@@ -29,10 +97,18 @@
           sipTcpPortMax: 0,
           rtpProxyPortBase: 0,
           rtpProxyPortMax: 0,
+          transcoderPortBase: 0,
+          transcoderPortMax: 0,
         },
         formRules: {
-          sipTcpPortBase: [
-          { required: true, message: 'Please enter a valid sipTcpPortBase', trigger: 'blur' },
+          sipTcpPortMax: [
+          { validator: checkSipTcpPortMaxRange, trigger: 'blur' },
+          ],
+          rtpProxyPortMax: [
+          { validator: checkRtpProxyPortMaxRange, trigger: 'blur' },
+          ],
+          transcoderPortMax: [
+          { validator: checkTranscoderPortMaxRange, trigger: 'blur' },
           ],
         },
         formLoading: true,
@@ -98,3 +174,9 @@
   };
 
 </script>
+
+<style scoped>
+  .input-inline {
+    display: inline-block;
+  }
+</style>

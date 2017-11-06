@@ -1,0 +1,13 @@
+{
+ "packet_rate_ratio":
+  "The packet rate ratio allows the transport to detect a potential DoS attack. It works by detecting the packet read rate per second as designated by the upper limit. If the value of packet rate is 50/100, the maximum packet rate before the SBC raises the alert level if a potential denial of service attack is 100 packets per second. When this happens, the transport layer checks if there is a particular IP that is sending more than its allowable rate of 50 packets per second. If the sender is violating the threshold, it will be banned for 1 hour which is the third parameter of 3600 seconds.",
+
+ "packet_rate_white_list":
+  "One may statically define a list of known IP addresses or networks so that they get immunity against the packet-rate-ratio algorithm. This would normally contain the ip addresses of known traffic sources or destinations like the local iPBX or trunk gateways. For Call Centers with predictive or progressive dialers in the network, it would be wise to also white-list those applications.",
+
+ "execute_on_ban":
+  "If a source network or address is banned, it can execute a script with the newly blocked address as the sole argument. This would allow any arbitrary action to be executed like raising an alarm or permanently ban the address in iptables. Absolute path must be used.",
+
+ "auto_null_route_on_ban":
+  "If a source network or address is banned, automatically add a null route in the routing table"
+}

@@ -109,16 +109,16 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
-          <el-input-number v-model="editForm.sipPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="editForm.sipPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="TLS Port">
-          <el-input-number v-model="editForm.tlsPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="editForm.tlsPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="WS Port">
-          <el-input-number v-model="editForm.wsPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="editForm.wsPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="WSS Port">
-          <el-input-number v-model="editForm.wssPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="editForm.wssPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
           <el-input type="textarea" v-model="editForm.subnets"></el-input>
@@ -201,16 +201,16 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
-          <el-input-number v-model="addForm.sipPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="addForm.sipPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="TLS Port">
-          <el-input-number v-model="addForm.tlsPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="addForm.tlsPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="WS Port">
-          <el-input-number v-model="addForm.wsPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="addForm.wsPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="WSS Port">
-          <el-input-number v-model="addForm.wssPort" :min="0" :max="200000"></el-input-number>
+          <el-input-number v-model="addForm.wssPort" :min="1" :max="65535"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
           <el-input type="textarea" v-model="addForm.subnets"></el-input>

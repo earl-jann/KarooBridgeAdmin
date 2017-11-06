@@ -24,6 +24,8 @@ export default class PortRangesTransformer extends Transformer {
       sipTcpPortMax: object.sip_tcp_port_max,
       rtpProxyPortBase: object.rtp_proxy_port_base,
       rtpProxyPortMax: object.rtp_proxy_port_max,
+      transcoderPortBase: object.transcoder_port_base,
+      transcoderPortMax: object.transcoder_port_max,
     };
   }
 
@@ -41,6 +43,8 @@ export default class PortRangesTransformer extends Transformer {
       sip_tcp_port_max: object.sipTcpPortMax,
       rtp_proxy_port_base: object.rtpProxyPortBase,
       rtp_proxy_port_max: object.rtpProxyPortMax,
+      transcoder_port_base: object.transcoderPortBase,
+      transcoder_port_max: object.transcoderPortMax,
     };
   }
 }

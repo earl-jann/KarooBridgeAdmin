@@ -1,0 +1,3 @@
+{
+ "header": "By default, Karoo does not manage the firewall. If you want to let the SBC init script to manage the firewall rules, enable the switch."
+}

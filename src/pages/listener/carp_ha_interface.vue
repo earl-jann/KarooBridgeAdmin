@@ -110,19 +110,19 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
-          <el-input-number v-model="form.sipPort" :min="0" :max="200000"
+          <el-input-number v-model="form.sipPort" :min="1" :max="65535"
           :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="TLS Port">
-          <el-input-number v-model="form.tlsPort" :min="0" :max="200000"
+          <el-input-number v-model="form.tlsPort" :min="1" :max="65535"
           :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="WS Port">
-          <el-input-number v-model="form.wsPort" :min="0" :max="200000"
+          <el-input-number v-model="form.wsPort" :min="1" :max="65535"
           :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="WSS Port">
-          <el-input-number v-model="form.wssPort" :min="0" :max="200000"
+          <el-input-number v-model="form.wssPort" :min="1" :max="65535"
           :disabled="true"></el-input-number>
         </el-form-item>
         <el-form-item label="Subnets">
