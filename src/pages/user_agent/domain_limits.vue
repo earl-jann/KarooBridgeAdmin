@@ -23,7 +23,8 @@
       <el-table-column prop="id" label="Domain" width="200" sortable>
       </el-table-column>
       </el-table-column>
-        <el-table-column prop="enabled" label="Enabled" width="200" sortable>
+        <el-table-column prop="enabled" label="Enabled"
+          :formatter="formatBoolean" width="200" sortable>
       </el-table-column>
       <el-table-column prop="maxChannels" label="Max Channels" width="300" sortable>
       </el-table-column>
@@ -75,9 +76,7 @@
             <el-switch
               v-model="addForm.enabled"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-value="1"
-              off-value="0">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
@@ -143,7 +142,11 @@
     methods: {
       handleCurrentChange(val) {
         this.page = val;
-        this.getListeners();
+        this.getObjects();
+      },
+
+      formatBoolean(row, column, value) {
+        return value === true ? 'Yes' : 'No';
       },
 
       getObjects() {
@@ -279,7 +282,7 @@
       //         message: 'Success',
       //         type: 'success',
       //       });
-      //       this.getListeners();
+      //       this.getObjects();
       //     });
       //   }).catch(() => {
       //   });

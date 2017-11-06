@@ -61,11 +61,17 @@
         <el-form-item label="Description" prop="description">
           <el-input v-model="editForm.description"></el-input>
         </el-form-item>
-        <el-form-item label="Minimum Port Range" prop="portBase">
-          <el-input-number v-model="editForm.portBase" :min="1" :max="65535" @change=""></el-input-number>
-        </el-form-item>
-        <el-form-item label="Maximum Port Range" prop="portMax">
-          <el-input-number v-model="editForm.portMax" :min="1" :max="65535" @change=""></el-input-number>
+        <el-form-item label="Port Range" prop="portMax">
+          <div class="input-inline">
+              <el-form-item prop="portBase">
+                <el-input-number v-model="editForm.portBase" :min="1" :max="65535" @change=""></el-input-number>
+              </el-form-item>
+            </div>
+            <div class="input-inline">
+              <el-form-item>
+                <el-input-number v-model="editForm.portMax" :min="1" :max="65535" @change=""></el-input-number>
+              </el-form-item>
+          </div>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="editForm.type" size="small">
@@ -88,11 +94,17 @@
         <el-form-item label="Description" prop="description">
           <el-input v-model="addForm.description"></el-input>
         </el-form-item>
-        <el-form-item label="Minimum Port Range" prop="portBase">
-          <el-input-number v-model="addForm.portBase" :min="1" :max="65535" @change=""></el-input-number>
-        </el-form-item>
-        <el-form-item label="Maximum Port Range" prop="portMax">
-          <el-input-number v-model="addForm.portMax" :min="1" :max="65535" @change=""></el-input-number>
+        <el-form-item label="Port Range" prop="portMax">
+          <div class="input-inline">
+              <el-form-item prop="portBase">
+                <el-input-number v-model="addForm.portBase" :min="1" :max="65535" @change=""></el-input-number>
+              </el-form-item>
+            </div>
+            <div class="input-inline">
+              <el-form-item>
+                <el-input-number v-model="addForm.portMax" :min="1" :max="65535" @change=""></el-input-number>
+              </el-form-item>
+          </div>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="addForm.type" size="small">
@@ -380,5 +392,7 @@
 </script>
 
 <style scoped>
-
+  .input-inline {
+    display: inline-block;
+  }
 </style>

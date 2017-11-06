@@ -17,7 +17,8 @@
       <el-input v-model="form.homerHost" auto-complete="off"></el-input>
     </el-form-item>
     <el-form-item label="Homer Port">
-      <el-input-number v-model="form.homerPort" @change=""></el-input-number>
+      <el-input-number v-model="form.homerPort" :min="1" :max="65535"
+        @change=""></el-input-number>
     </el-form-item>
     <el-form-item label="Homer Password" prop="homerPassword">
       <el-input type="password" v-model="form.homerPassword" auto-complete="off"></el-input>
