@@ -26,7 +26,7 @@ export default [
   {
     path: '/home',
     component: require('@/pages/Home.vue'),
-    name: 'Listener',
+    name: 'Transport',
     iconClass: 'el-icon-setting',
     children: [
         { path: '/main', component: require('@/pages/Main.vue'), name: 'Main', hidden: true },
@@ -59,9 +59,23 @@ export default [
     },
   },
   {
+    path: '/routing',
+    component: require('@/pages/Home.vue'),
+    name: 'Routing',
+    iconClass: 'el-icon-setting',
+    children: [
+        { path: '/profiles', component: require('@/pages/routing/domains.vue'), name: 'Profiles' },
+        { path: '/advanced', component: require('@/pages/routing/domains.vue'), name: 'Advanced Modules' },
+    ],
+    // If the user needs to be authenticated to view this page
+    meta: {
+      auth: true,
+    },
+  },
+  {
     path: '/home',
     component: require('@/pages/Home.vue'),
-    name: 'SIP Capture',
+    name: 'Monitoring',
     iconClass: 'el-icon-setting',
     children: [
         { path: '/homer', component: require('@/pages/sipcapture/homer.vue'), name: 'Homer' },

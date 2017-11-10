@@ -260,6 +260,7 @@
         this.form = Object.assign({}, selectedListener);
         this.sourceAddress = selectedListener.ipAddress;
         this.form.sourceAddress = selectedListener.ipAddress;
+        this.form.interfaceName = selectedListener.id;
         // just make sure
         this.form.id = FORM_ID;
         this.form.enabled = true;

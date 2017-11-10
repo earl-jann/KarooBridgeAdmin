@@ -152,7 +152,7 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="External Address">
+        <el-form-item label="External Address" prop="externalAddress">
           <el-input type="textarea" v-model="addForm.externalAddress"></el-input>
         </el-form-item>
         <el-form-item label="TCP Enabled">

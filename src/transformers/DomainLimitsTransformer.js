@@ -6,7 +6,6 @@
  */
 
 import Transformer from './Transformer';
-import Vue from 'vue';
 
 export default class DomainLimitsTransformer extends Transformer {
 

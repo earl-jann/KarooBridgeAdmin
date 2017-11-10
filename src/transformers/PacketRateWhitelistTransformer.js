@@ -6,7 +6,6 @@
  */
 
 import Transformer from './Transformer';
-import Vue from 'vue';
 
 export default class PacketRateWhitelistTransformer extends Transformer {
 
@@ -20,6 +19,7 @@ export default class PacketRateWhitelistTransformer extends Transformer {
   static fetch(object) {
     return {
       id: object.id,
+      address: object.address,
       type: object.type,
     };
   }
@@ -34,6 +34,7 @@ export default class PacketRateWhitelistTransformer extends Transformer {
   static send(object) {
     return {
       id: object.id,
+      address: object.address,
       type: object.type,
     };
   }
