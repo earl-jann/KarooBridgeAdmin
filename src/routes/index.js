@@ -31,7 +31,7 @@ export default [
     children: [
         { path: '/main', component: require('@/pages/Main.vue'), name: 'Main', hidden: true },
         { path: '/interface', component: require('@/pages/listener/listener.vue'), name: 'Interfaces' },
-        { path: '/carp-ha-interface', component: require('@/pages/listener/carp_ha_interface.vue'), name: 'CARP HA Interface' },
+        { path: '/ha-interface', component: require('@/pages/listener/carp_ha_interface.vue'), name: 'High Availability Interface' },
         { path: '/tls', component: require('@/pages/listener/tls.vue'), name: 'TLS' },
         { path: '/autoban', component: require('@/pages/listener/autoban.vue'), name: 'Autoban' },
         { path: '/autoban-packet-rate-whitelist', component: require('@/pages/listener/autoban_packet_rate_whitelist.vue'), name: 'Packet Rate Whitelist' },
@@ -50,8 +50,7 @@ export default [
     iconClass: 'el-icon-setting',
     children: [
         { path: '/user-agent', component: require('@/pages/user_agent/user_agent.vue'), name: 'User Agent' },
-        { path: '/channel-limits', component: require('@/pages/user_agent/channel_limits.vue'), name: 'Channel Limits' },
-        { path: '/domain-limits', component: require('@/pages/user_agent/domain_limits.vue'), name: 'Domain Limits' },
+        { path: '/call-limits', component: require('@/pages/user_agent/channel_limits.vue'), name: 'Call Limits' },
     ],
     // If the user needs to be authenticated to view this page
     meta: {

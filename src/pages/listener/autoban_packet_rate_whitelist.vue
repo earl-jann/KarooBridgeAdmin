@@ -87,6 +87,30 @@
   export default {
 
     data() {
+      const validateIpAddress = ((rule, value, callback) => {
+        const ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+        const ipSubnetRegex = /^([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}\/\d+$/;
+        let result = '';
+        let isSourceIp = false;
+
+        if (this.addForm.type === 'SOURCE_IP'
+          || this.editForm.type === 'SOURCE_IP') {
+          isSourceIp = true;
+        }
+
+        if (isSourceIp) {
+          result = value.match(ipRegex);
+        } else {
+          result = value.match(ipSubnetRegex);
+        }
+
+        if (!result) {
+          result = callback(new Error('Please input a Valid IP Address'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
       return {
         filters: {
           address: '',
@@ -101,13 +125,14 @@
         editFormRules: {
           address: [
           { required: true, message: 'Please enter a valid address', trigger: 'blur' },
+          { validator: validateIpAddress, trigger: 'blur' },
           ],
         },
 
         editForm: {
           id: '',
           address: '',
-          type: 'SOURCE_IP',
+          type: '',
         },
 
         addFormVisible: false,
@@ -115,13 +140,14 @@
         addFormRules: {
           address: [
           { required: true, message: 'Please enter a valid address', trigger: 'blur' },
+          { validator: validateIpAddress, trigger: 'blur' },
           ],
         },
 
         addForm: {
           id: '',
           address: '',
-          type: 'SOURCE_IP',
+          type: '',
         },
       };
     },
@@ -194,7 +220,7 @@
         this.addForm = {
           id: '',
           address: '',
-          type: 'SOURCE_IP',
+          type: '',
         };
       },
 
@@ -222,6 +248,12 @@
                   type: 'error',
                 });
               });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: 'Edit Cancelled',
+              });
+              this.$refs.editForm.resetFields();
             });
           }
         });
@@ -251,6 +283,12 @@
                   type: 'error',
                 });
               });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: 'Add Cancelled',
+              });
+              this.$refs.addForm.resetFields();
             });
           }
         });

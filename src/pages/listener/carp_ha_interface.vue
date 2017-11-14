@@ -25,13 +25,13 @@
         </el-form-item>
         <el-form-item label="Source IP Address" prop="sourceAddress">
           <el-select v-model="sourceAddress" placeholder="Select"
-          :loading='sourceAddressLoading' @change='assignListenerValuesToForm'
-          :disabled="disabled">
+          :loading='sourceAddressLoading' @change='assignListenerValuesToForm'>
             <el-option
               v-for="item in sourceAddresses"
               :key="item.id"
               :label="item.ipAddress + ':' + item.description"
-              :value="item.ipAddress">
+              :value="item.ipAddress"
+              :disabled="disabled">
             </el-option>
           </el-select>
         </el-form-item>
@@ -41,7 +41,7 @@
           <el-input type="password" v-model="form.carpPassword" auto-complete="off"
           :disabled="disabled"></el-input>
         </el-form-item>
-        <el-form-item label="VHID">
+        <el-form-item label="VHID" prop="vhid">
           <el-input-number v-model="form.vhid" :min="1" :max="255"
           :disabled="disabled"></el-input-number>
         </el-form-item>
@@ -144,6 +144,17 @@
   const FORM_ID = 'carp_ha_interface';
   export default {
     data() {
+      const validateIpAddress = ((rule, value, callback) => {
+        const ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+        let result = value.match(ipRegex);
+
+        if (!result) {
+          result = callback(new Error('Please input a Valid IP Address'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
       const checkVirtualIpAddress = ((rule, value, callback) => {
         let result = '';
         if (!value) {
@@ -186,6 +197,7 @@
         formRules: {
           virtualIpAddress: [
           { validator: checkVirtualIpAddress, trigger: 'blur' },
+          { validator: validateIpAddress, trigger: 'blur' },
           ],
           description: [
           { required: true, message: 'Please enter a valid description', trigger: 'blur' },
@@ -202,18 +214,12 @@
         },
         disabled: false,
         formLoading: true,
-        sourceAddressLoading: false,
+        sourceAddressLoading: true,
       };
     },
     methods: {
       getCarpHaInterface() {
         Vue.console.debug('getCarpHaInterface');
-        // {"where":{"id":"earl"}}
-        // filter[where][property]=value
-        // const params = {
-        //   page: this.page,
-        //   id: this.filters.id,
-        // };
         this.formLoading = true;
         // NProgress.start();
         new CarpHaInterfaceProxy().find(this.form.id).then((response) => {
@@ -253,18 +259,19 @@
         });
       },
       assignListenerValuesToForm(listenerIp) {
-        Vue.console.log('listener: ' + listenerIp);
-        Vue.console.log('form: ' + this.form);
         const selectedListener = this.sourceAddresses.find(item => item.ipAddress === listenerIp);
-        Vue.console.log('listener selected: ' + selectedListener);
+        // store temp
+        const tempVirtualIpAddress = this.form.virtualIpAddress;
         this.form = Object.assign({}, selectedListener);
         this.sourceAddress = selectedListener.ipAddress;
         this.form.sourceAddress = selectedListener.ipAddress;
         this.form.interfaceName = selectedListener.id;
+        // put back temp
+        this.form.virtualIpAddress = tempVirtualIpAddress;
         // just make sure
+        this.form.vhid = '';
         this.form.id = FORM_ID;
         this.form.enabled = true;
-        Vue.console.log('form: ' + this.form);
       },
       resetForm() {
         this.form = {
@@ -291,6 +298,9 @@
           wssPort: '',
           subnets: '',
         };
+        // We disable the option instead of the select input because of a bug in Element-Vue
+        // resolved in 2.0.2: https://github.com/ElemeFE/element/issues/7969
+        this.sourceAddress = '';
       },
       resetFieldsIfOff(value) {
         this.$refs.form.resetFields();
@@ -344,8 +354,8 @@
       },
     },
     mounted() {
-      this.getCarpHaInterface();
       this.getListeners();
+      this.getCarpHaInterface();
     },
   };
 
