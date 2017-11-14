@@ -6,7 +6,6 @@
  */
 
 import Transformer from './Transformer';
-import Vue from 'vue';
 
 export default class AutobanTransformer extends Transformer {
 
@@ -18,9 +17,6 @@ export default class AutobanTransformer extends Transformer {
    * @returns {Object} The transformed object
    */
   static fetch(object) {
-    Vue.console.log('AutobanTransformer::packet_rate_white_list: '
-      + object.packet_rate_white_list);
-    // parse packet rate white list
     return {
       id: object.id,
       packetRateMinTreshold: object.packet_rate_min_treshold,
@@ -40,8 +36,6 @@ export default class AutobanTransformer extends Transformer {
    * @returns {Object} The transformed object
    */
   static send(object) {
-    Vue.console.log('AutobanTransformer::packetRateWhitelist: '
-      + object.packetRateWhitelist);
     return {
       id: object.id,
       packet_rate_min_treshold: object.packetRateMinTreshold,

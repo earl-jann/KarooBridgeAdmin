@@ -30,12 +30,14 @@
         </el-form-item>
       </el-form>
     </el-col>
-    <el-table :data="firewallRules" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+    <el-table :data="firewallRules" highlight-current-row v-loading="listLoading" @selection-change="selsChange" border style="width: 100%;">
       <el-table-column prop="id" label="Name" width="200" :sortable="!disabled">
       </el-table-column>
-      <el-table-column prop="portBase" label="Port Number" width="200" :sortable="!disabled">
-      </el-table-column>
-      <el-table-column prop="portMax" label="Max Port Number" width="200" :sortable="!disabled">
+      <el-table-column label="Port Range">
+        <el-table-column prop="portBase" label="Base Port Number" width="200" :sortable="!disabled">
+        </el-table-column>
+        <el-table-column prop="portMax" label="Max Port Number" width="200" :sortable="!disabled">
+        </el-table-column>
       </el-table-column>
       <el-table-column prop="type" label="Type" width="150" :sortable="!disabled">
       </el-table-column>

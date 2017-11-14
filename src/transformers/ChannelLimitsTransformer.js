@@ -6,7 +6,6 @@
  */
 
 import Transformer from './Transformer';
-import Vue from 'vue';
 
 export default class ChannelLimitsTransformer extends Transformer {
 
@@ -22,6 +21,7 @@ export default class ChannelLimitsTransformer extends Transformer {
       id: object.id,
       enabled: object.enabled,
       maxChannels: object.max_channels,
+      type: object.type,
     };
   }
 
@@ -37,6 +37,7 @@ export default class ChannelLimitsTransformer extends Transformer {
       id: object.id,
       enabled: object.enabled,
       max_channels: object.maxChannels,
+      type: object.type,
     };
   }
 }

@@ -3,7 +3,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.id" placeholder="Address"></el-input>
+          <el-input v-model="filters.address" placeholder="Address"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" v-on:click="getPacketRateWhitelist">Search</el-button>
@@ -14,14 +14,15 @@
       </el-form>
     </el-col>
     <el-table :data="packetRateWhitelist" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-      <el-table-column type="selection" width="55">
+      <!-- <el-table-column type="selection" width="55">
+      </el-table-column> -->
+
+      <!-- <el-table-column type="index" labelwidth="30" prop="id">
+      </el-table-column> -->
+
+      <el-table-column prop="address" label="Address" width="200" sortable>
       </el-table-column>
-      <!--
-      <el-table-column type="index" width="20">
-      </el-table-column>
-      -->
-      <el-table-column prop="id" label="Address" width="200" sortable>
-      </el-table-column>
+
       <el-table-column prop="type" label="Type" :formatter="formatType" width="200" sortable>
       </el-table-column>
 
@@ -40,8 +41,9 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="Address" prop="id">
-          <el-input v-model="editForm.id" :disabled="true"></el-input>
+        <el-input v-model="editForm.id" type="hidden"></el-input>
+        <el-form-item label="Address" prop="address">
+          <el-input v-model="editForm.address"></el-input>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="editForm.type" size="small">
@@ -58,8 +60,9 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="Address" prop="id">
-          <el-input v-model="addForm.id" auto-complete="off"></el-input>
+        <el-input v-model="addForm.id" type="hidden"></el-input>
+        <el-form-item label="Address" prop="address">
+          <el-input v-model="addForm.address" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Type">
           <el-radio-group v-model="addForm.type" size="small">
@@ -84,9 +87,33 @@
   export default {
 
     data() {
+      const validateIpAddress = ((rule, value, callback) => {
+        const ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+        const ipSubnetRegex = /^([1-9]|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])){3}\/\d+$/;
+        let result = '';
+        let isSourceIp = false;
+
+        if (this.addForm.type === 'SOURCE_IP'
+          || this.editForm.type === 'SOURCE_IP') {
+          isSourceIp = true;
+        }
+
+        if (isSourceIp) {
+          result = value.match(ipRegex);
+        } else {
+          result = value.match(ipSubnetRegex);
+        }
+
+        if (!result) {
+          result = callback(new Error('Please input a Valid IP Address'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
       return {
         filters: {
-          id: '',
+          address: '',
         },
         packetRateWhitelist: [],
         total: 0,
@@ -96,27 +123,31 @@
         editFormVisible: false,
         editLoading: false,
         editFormRules: {
-          id: [
+          address: [
           { required: true, message: 'Please enter a valid address', trigger: 'blur' },
+          { validator: validateIpAddress, trigger: 'blur' },
           ],
         },
 
         editForm: {
           id: '',
-          type: 'SOURCE_IP',
+          address: '',
+          type: '',
         },
 
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
-          id: [
+          address: [
           { required: true, message: 'Please enter a valid address', trigger: 'blur' },
+          { validator: validateIpAddress, trigger: 'blur' },
           ],
         },
 
         addForm: {
           id: '',
-          type: 'SOURCE_IP',
+          address: '',
+          type: '',
         },
       };
     },
@@ -138,7 +169,7 @@
 
       getPacketRateWhitelist() {
         const params = {
-          'filter[where][id]': this.filters.id,
+          'filter[where][address]': this.filters.address,
         };
         this.listLoading = true;
         // NProgress.start();
@@ -188,7 +219,8 @@
         this.addFormVisible = true;
         this.addForm = {
           id: '',
-          type: 'SOURCE_IP',
+          address: '',
+          type: '',
         };
       },
 
@@ -216,6 +248,12 @@
                   type: 'error',
                 });
               });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: 'Edit Cancelled',
+              });
+              this.$refs.editForm.resetFields();
             });
           }
         });
@@ -245,6 +283,12 @@
                   type: 'error',
                 });
               });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: 'Add Cancelled',
+              });
+              this.$refs.addForm.resetFields();
             });
           }
         });

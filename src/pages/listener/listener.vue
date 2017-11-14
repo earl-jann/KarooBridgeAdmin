@@ -46,7 +46,7 @@
         <el-form-item label="Description" prop="description">
           <el-input v-model="editForm.description" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="IP Address" prop="ip_address">
+        <el-form-item label="IP Address" prop="ipAddress">
           <el-input v-model="editForm.ipAddress" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Default">
@@ -152,7 +152,7 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="External Address">
+        <el-form-item label="External Address" prop="externalAddress">
           <el-input type="textarea" v-model="addForm.externalAddress"></el-input>
         </el-form-item>
         <el-form-item label="TCP Enabled">
@@ -232,6 +232,17 @@
   export default {
 
     data() {
+      const validateIpAddress = ((rule, value, callback) => {
+        const ipRegex = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/;
+        let result = value.match(ipRegex);
+
+        if (!result) {
+          result = callback(new Error('Please input a Valid IP Address'));
+        } else {
+          result = callback();
+        }
+        return result;
+      });
       return {
         filters: {
           id: '',
@@ -246,6 +257,9 @@
         editFormRules: {
           id: [
           { required: true, message: 'Please enter a valid name', trigger: 'blur' },
+          ],
+          ipAddress: [
+          { validator: validateIpAddress, trigger: 'blur' },
           ],
         },
 
@@ -275,6 +289,9 @@
           ],
           externalAddress: [
           { required: true, message: 'Please enter a valid external address', trigger: 'blur' },
+          ],
+          ipAddress: [
+          { validator: validateIpAddress, trigger: 'blur' },
           ],
         },
 

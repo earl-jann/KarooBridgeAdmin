@@ -11,7 +11,10 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Version" prop="homerVersion">
-      <el-input v-model="form.homerVersion" auto-complete="off"></el-input>
+      <el-radio-group v-model="form.homerVersion">
+        <el-radio-button label="1">Version 1</el-radio-button>
+        <el-radio-button label="2">Version 2</el-radio-button>
+      </el-radio-group>
     </el-form-item>
     <el-form-item label="Homer Host" prop="homerHost">
       <el-input v-model="form.homerHost" auto-complete="off"></el-input>
@@ -61,7 +64,7 @@
         },
         formRules: {
           homerVersion: [
-          { required: true, message: 'Please enter a valid Homer Version', trigger: 'blur' },
+          { required: true, message: 'Please select a Homer Version', trigger: 'blur' },
           ],
           homerHost: [
           { required: true, message: 'Please enter a valid Homer Host', trigger: 'blur' },

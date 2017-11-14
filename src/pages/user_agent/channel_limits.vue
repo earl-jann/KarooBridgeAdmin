@@ -3,7 +3,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.id" placeholder="Prefix"></el-input>
+          <el-input v-model="filters.id" placeholder="Domain/Prefix"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" v-on:click="getObjects">Search</el-button>
@@ -14,19 +14,16 @@
       </el-form>
     </el-col>
     <el-table :data="channelLimits" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
-      <!--
-      <el-table-column type="index" width="20">
-      </el-table-column>
-      -->
-      <el-table-column prop="id" label="Prefix" width="200" sortable>
+
+      <el-table-column prop="id" label="Domain/Prefix" width="200" sortable>
       </el-table-column>
       </el-table-column>
         <el-table-column prop="enabled" label="Enabled" width="200"
           :formatter="formatBoolean" sortable>
       </el-table-column>
       <el-table-column prop="maxChannels" label="Max Channels" width="300" sortable>
+      </el-table-column>
+      <el-table-column prop="type" label="Type" :formatter="formatType" width="200" sortable>
       </el-table-column>
 
       <el-table-column label="Actions">
@@ -44,7 +41,7 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-form-item label="Prefix" prop="id">
+        <el-form-item label="Domain/Prefix" prop="id">
           <el-input v-model="editForm.id" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="Enabled">
@@ -59,6 +56,12 @@
         <el-form-item label="Max Channels">
           <el-input-number v-model="editForm.maxChannels" :min="0"></el-input-number>
         </el-form-item>
+        <el-form-item label="Type" prop="type">
+          <el-radio-group v-model="editForm.type" size="small">
+            <el-radio-button label="CHANNEL" border>Channel</el-radio-button>
+            <el-radio-button label="DOMAIN" border>Domain</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click.native="editFormVisible = false">Cancel</el-button>
@@ -68,7 +71,7 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-form-item label="Prefix" prop="id">
+        <el-form-item label="Domain/Prefix" prop="id">
           <el-input v-model="addForm.id" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Enabled">
@@ -82,6 +85,12 @@
         </el-form-item>
         <el-form-item label="Max Channels">
           <el-input-number v-model="addForm.maxChannels" :min="0"></el-input-number>
+        </el-form-item>
+        <el-form-item label="Type" prop="type">
+          <el-radio-group v-model="addForm.type" size="small">
+            <el-radio-button label="CHANNEL" border>Channel</el-radio-button>
+            <el-radio-button label="DOMAIN" border>Domain</el-radio-button>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -113,7 +122,10 @@
         editLoading: false,
         editFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid domain/prefix', trigger: 'blur' },
+          ],
+          type: [
+          { required: true, message: 'Please select a type', trigger: 'blur' },
           ],
         },
 
@@ -121,13 +133,17 @@
           id: '001',
           enabled: true,
           maxChannels: '0',
+          type: '',
         },
 
         addFormVisible: false,
         addLoading: false,
         addFormRules: {
           id: [
-          { required: true, message: 'Please enter a valid prefix', trigger: 'blur' },
+          { required: true, message: 'Please enter a valid domain/prefix', trigger: 'blur' },
+          ],
+          type: [
+          { required: true, message: 'Please select a type', trigger: 'blur' },
           ],
         },
 
@@ -135,11 +151,21 @@
           id: '',
           enabled: true,
           maxChannels: 30,
+          type: '',
         },
       };
     },
 
     methods: {
+      formatType(row, column) {
+        let result = '';
+        if (row.type === 'CHANNEL') {
+          result = 'Channel';
+        } else if (row.type === 'DOMAIN') {
+          result = 'Domain';
+        }
+        return result;
+      },
       handleCurrentChange(val) {
         this.page = val;
         this.getObjects();

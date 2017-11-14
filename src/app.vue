@@ -41,7 +41,7 @@
     mounted() {
       // If the user is authenticated,
       // fetch the data from the API
-      Vue.console.log('Main Created! Authenticated: ' + this.$store.state.auth.authenticated + ', User: ' + this.$store.state.user.userId);
+      Vue.console.debug('Main Created! Authenticated: ' + this.$store.state.auth.authenticated + ', User: ' + this.$store.state.user.userId);
       if (this.$store.state.auth.authenticated) {
         // set the auth token before finding...
         this.$store.dispatch('user/find', this.$store.state.user.userId);
