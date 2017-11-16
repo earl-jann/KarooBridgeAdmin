@@ -12,6 +12,8 @@
           <el-button type="primary" @click="handleAdd">New</el-button>
         </el-form-item>
       </el-form>
+      <i class="el-icon-information"> </i>
+      <em>{{ $t('channelLimits.header') }}</em>
     </el-col>
     <el-table :data="channelLimits" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 
@@ -40,7 +42,7 @@
       </el-pagination>
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
-      <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+      <el-form :model="editForm" label-width="120px" :rules="editFormRules" ref="editForm">
         <el-form-item label="Domain/Prefix" prop="id">
           <el-input v-model="editForm.id" :disabled="true"></el-input>
         </el-form-item>
@@ -70,7 +72,7 @@
     </el-dialog>
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
-      <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+      <el-form :model="addForm" label-width="120px" :rules="addFormRules" ref="addForm">
         <el-form-item label="Domain/Prefix" prop="id">
           <el-input v-model="addForm.id" auto-complete="off"></el-input>
         </el-form-item>

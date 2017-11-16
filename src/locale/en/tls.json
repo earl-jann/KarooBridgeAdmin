@@ -1,0 +1,19 @@
+{
+"tls_ca_file":
+"The TLS Certificate Authority",
+
+"tls_ca_path":
+"The Additional TLS Certificate Authority Directory. The files must be named with the CA subject name hash value. (see man SSL_CTX_load_verify_locations for more info)",
+
+"tls_certificate_file":
+" The TLS Server Certificate",
+
+"tls_private_key_file":
+"The TLS Server Private Key",
+
+"tls_cert_password":
+"The TLS Certificate Password",
+
+"tls_verify_peer":
+"The TLS Verification Mode. True if server will verify client certs"
+}

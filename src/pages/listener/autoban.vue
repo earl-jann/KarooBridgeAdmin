@@ -2,23 +2,26 @@
   <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;" :rules="formRules" v-loading="formLoading">
     <el-input type="hidden" v-model="form.id"></el-input>
     <el-form-item label="Packet Rate Min/Max Treshold">
-        <el-input-number v-model="form.packetRateMinTreshold" @change=""></el-input-number>
-        <el-input-number v-model="form.packetRateMaxTreshold" @change=""></el-input-number>
+      <el-tooltip :content="$t('autoban.packet_rate_ratio')" placement="top">
+        <el-input-number v-model="form.packetRateMinTreshold"></el-input-number>
+        <el-input-number v-model="form.packetRateMaxTreshold"></el-input-number>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="Packet Rate Treshold Ban Duration">
-        <el-input-number v-model="form.packetRateTresholdBanDuration" @change=""></el-input-number>
+      <el-tooltip :content="$t('autoban.packet_rate_ratio')" placement="top">
+        <el-input-number v-model="form.packetRateTresholdBanDuration"></el-input-number>
+      </el-tooltip>
     </el-form-item>
-<!--     <el-form-item label="Packet Rate Whitelist">
-      <el-input v-model="form.packetRateWhitelist" type="textarea" placeholder=""></el-input>
-    </el-form-item> -->
     <el-input type="hidden" v-model="form.packetRateWhitelist"></el-input>
     <el-form-item label="Execute On Ban Script">
-      <input type="file" ref="executeOnBan" :name="executeOnBan"
-      accept=".sh" @change="filesChange('executeOnBan', $event)">
-      </input>
+      <el-tooltip :content="$t('autoban.execute_on_ban')" placement="top">
+        <input type="file" ref="executeOnBan" :name="executeOnBan"
+          accept=".sh" @change="filesChange('executeOnBan', $event)">
+        </input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="Auto Null Route On Ban Enabled">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('autoban.auto_null_route_on_ban')" placement="top">
         <el-switch
           v-model="form.autoNullRouteOnBan"
           on-color="#13ce66"

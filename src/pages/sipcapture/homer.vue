@@ -1,8 +1,10 @@
 <template>
   <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;" :rules="formRules" v-loading="formLoading">
     <el-input type="hidden" v-model="form.id"></el-input>
+    <i class="el-icon-information"> </i>
+    <em>{{ $t('homer.header') }}</em>
     <el-form-item label="Homer Enabled">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('homer.homer_enabled')" placement="top">
         <el-switch
           v-model="form.homerEnabled"
           on-color="#13ce66"
@@ -11,23 +13,31 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Version" prop="homerVersion">
-      <el-radio-group v-model="form.homerVersion">
-        <el-radio-button label="1">Version 1</el-radio-button>
-        <el-radio-button label="2">Version 2</el-radio-button>
-      </el-radio-group>
+      <el-tooltip :content="$t('homer.homer_version')" placement="top">
+        <el-radio-group v-model="form.homerVersion">
+          <el-radio-button label="1">Version 1</el-radio-button>
+          <el-radio-button label="2">Version 2</el-radio-button>
+        </el-radio-group>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Host" prop="homerHost">
-      <el-input v-model="form.homerHost" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('homer.homer_host')" placement="top">
+        <el-input v-model="form.homerHost" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Port">
-      <el-input-number v-model="form.homerPort" :min="1" :max="65535"
-        @change=""></el-input-number>
+      <el-tooltip :content="$t('homer.homer_port')" placement="top">
+        <el-input-number v-model="form.homerPort" :min="1" :max="65535"
+          @change=""></el-input-number>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Password" prop="homerPassword">
-      <el-input type="password" v-model="form.homerPassword" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('homer.homer_password')" placement="top">
+        <el-input type="password" v-model="form.homerPassword" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Compression">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('homer.homer_compression')" placement="top">
         <el-switch
           v-model="form.homerCompression"
           on-color="#13ce66"
@@ -36,7 +46,9 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Id" prop="homerId">
-      <el-input v-model="form.homerId" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('homer.homer_id')" placement="top">
+        <el-input v-model="form.homerId" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click.native="onSubmit">Submit</el-button>

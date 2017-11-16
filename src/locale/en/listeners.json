@@ -1,0 +1,41 @@
+{
+  "default_enabled":
+  "Enable this if you want peripheral services to use this transport as the default interface.",
+
+  "ip_address":
+  "The Host IP Address",
+
+  "external_address":
+  "(Optional) External IP address if the virtual IP is behind a port mapped firewall",
+
+  "tcp_enabled":
+  "Enable TCP Transport",
+
+  "udp_enabled":
+  "Enable UDP Transport",
+
+  "ws_enabled":
+  "Enable WebSocket Transport",
+
+  "wss_enabled":
+  "Enable Secure WebSocket Transport",
+
+  "tls_enabled":
+  "Enable TLS Transport",
+
+  "sip_port":
+  "Port for TCP and UDP",
+
+  "tls_port":
+  "Port for TLS",
+
+  "ws_port":
+  "Port for WebSocket",
+
+  "wss_port":
+  "Port for Secure WebSocket",
+
+  "subnets":
+  "(Optional) Comma delimited subnets reachable by this transport"
+
+}

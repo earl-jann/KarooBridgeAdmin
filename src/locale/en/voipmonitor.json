@@ -1,0 +1,13 @@
+{
+    "mysqlhost":
+    "The MySQL server can be an IP Address or hostname",
+
+    "mysqlport":
+    "Enter the MySQL Port Number",
+
+    "mysqlusername":
+    "Enter the MySQL Username",
+
+    "mysqlpassword":
+    "Enter the MySQL Password"
+}

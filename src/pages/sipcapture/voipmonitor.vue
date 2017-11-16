@@ -2,17 +2,25 @@
   <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;" :rules="formRules" v-loading="formLoading">
     <el-input type="hidden" v-model="form.id"></el-input>
     <el-form-item label="MySQL Host" prop="mySqlHost">
-      <el-input v-model="form.mySqlHost" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('voipmonitor.mysqlhost')" placement="top">
+        <el-input v-model="form.mySqlHost" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="MySQL Port">
-      <el-input-number v-model="form.mySqlPort"
-          :min="1" :max="65535" @change=""></el-input-number>
+      <el-tooltip :content="$t('voipmonitor.mysqlport')" placement="top">
+        <el-input-number v-model="form.mySqlPort"
+            :min="1" :max="65535" @change=""></el-input-number>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="MySQL Username" prop="mySqlUsername">
-      <el-input v-model="form.mySqlUsername" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('voipmonitor.mysqlusername')" placement="top">
+        <el-input v-model="form.mySqlUsername" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="MySQL Password" prop="mySqlPassword">
-      <el-input type="password" v-model="form.mySqlPassword" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('voipmonitor.mysqlpassword')" placement="top">
+        <el-input type="password" v-model="form.mySqlPassword" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click.native="onSubmit">Submit</el-button>

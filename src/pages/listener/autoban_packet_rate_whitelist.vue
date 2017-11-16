@@ -12,14 +12,10 @@
           <el-button type="primary" @click="handleAdd">New</el-button>
         </el-form-item>
       </el-form>
+      <i class="el-icon-information"> </i>
+      <em>{{ $t('autoban.packet_rate_white_list') }}</em>
     </el-col>
     <el-table :data="packetRateWhitelist" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-      <!-- <el-table-column type="selection" width="55">
-      </el-table-column> -->
-
-      <!-- <el-table-column type="index" labelwidth="30" prop="id">
-      </el-table-column> -->
-
       <el-table-column prop="address" label="Address" width="200" sortable>
       </el-table-column>
 

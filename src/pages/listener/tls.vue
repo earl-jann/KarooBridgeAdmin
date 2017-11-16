@@ -1,34 +1,43 @@
 <template>
-<!-- enctype="multipart/form-data" -->
   <el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;" :rules="formRules" v-loading="formLoading">
     <el-input type="hidden" v-model="form.id"></el-input>
     <el-form-item label="TLS Certificate Authority File">
-      <input type="file" ref="tlsCaFile" :name="tlsCaFile"
-        accept=".crt" @change="filesChange('tlsCaFile', $event)">
-      </input>
+      <el-tooltip :content="$t('tls.tls_ca_file')" placement="top">
+        <input type="file" ref="tlsCaFile" :name="tlsCaFile"
+          accept=".crt" @change="filesChange('tlsCaFile', $event)">
+        </input>
+      </el-tooltip>
     </el-form-item>
     <el-form-item label="TLS CA Path">
-      <el-input v-model="form.tlsCaPath" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('tls.tls_ca_path')" placement="top">
+        <el-input v-model="form.tlsCaPath" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
 
     <el-form-item label="TLS Server Certificate Authority File">
-      <input type="file" ref="tlsCertificateFile" :name="tlsCertificateFile"
-        accept=".crt" @change="filesChange('tlsCertificateFile', $event)">
-      </input>
+      <el-tooltip :content="$t('tls.tls_certificate_file')" placement="top">
+        <input type="file" ref="tlsCertificateFile" :name="tlsCertificateFile"
+          accept=".crt" @change="filesChange('tlsCertificateFile', $event)">
+        </input>
+      </el-tooltip>
     </el-form-item>
 
     <el-form-item label="TLS Server Private Key File">
-      <input type="file" ref="tlsPrivateKeyFile" :name="tlsPrivateKeyFile"
-        accept=".key" @change="filesChange('tlsPrivateKeyFile', $event)">
-      </input>
+      <el-tooltip :content="$t('tls.tls_private_key_file')" placement="top">
+        <input type="file" ref="tlsPrivateKeyFile" :name="tlsPrivateKeyFile"
+          accept=".key" @change="filesChange('tlsPrivateKeyFile', $event)">
+        </input>
+      </el-tooltip>
     </el-form-item>
 
     <el-form-item label="TLS Certificate Password">
-      <el-input type="password" v-model="form.tlsCertPassword" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('tls.tls_cert_password')" placement="top">
+        <el-input type="password" v-model="form.tlsCertPassword" auto-complete="off"></el-input>
+      </el-tooltip>
     </el-form-item>
 
     <el-form-item label="TLS Verification Mode">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('tls.tls_verify_peer')" placement="top">
         <el-switch
           v-model="form.tlsVerifyPeer"
           on-color="#13ce66"

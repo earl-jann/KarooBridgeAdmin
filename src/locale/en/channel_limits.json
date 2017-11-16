@@ -1,0 +1,4 @@
+{
+ "header":
+ "Starting version 2.0.2, channel limits can now be enforced using call prefixes.For example, if you want to limit international calls to just 30 simultaneous calls, you can add an entry for the IDD prefix"
+}

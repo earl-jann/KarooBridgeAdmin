@@ -2,10 +2,12 @@
 	<el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;" :rules="formRules" v-loading="formLoading">
     <el-input type="hidden" v-model="form.id"></el-input>
     <el-form-item label="User Agent Name" prop="userAgentName">
-      <el-input v-model="form.userAgentName" auto-complete="off"></el-input>
+      <el-tooltip :content="$t('useragent.user_agent_name')" placement="top">
+        <el-input v-model="form.userAgentName" auto-complete="off"></el-input>
+      </el-tooltip>        
     </el-form-item>
     <el-form-item label="Register State in Contact Parameters">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('useragent.register_state_in_contact_params')" placement="top">
         <el-switch
           v-model="form.registerStateInContactParams"
           on-color="#13ce66"
@@ -14,7 +16,7 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Dialog State in Contact Parameters">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('useragent.dialog_state_in_contact_params')" placement="top">
         <el-switch
           v-model="form.dialogStateInContactParams"
           on-color="#13ce66"
@@ -23,7 +25,7 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Enable Options Routing">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('useragent.enable_options_routing')" placement="top">
         <el-switch
           v-model="form.enableOptionsRouting"
           on-color="#13ce66"
@@ -32,7 +34,7 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Disable Options Keep Alive">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('useragent.disable_options_keep_alive')" placement="top">
         <el-switch
           v-model="form.disableOptionsKeepAlive"
           on-color="#13ce66"
@@ -41,7 +43,7 @@
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Require RTP for Registrations">
-      <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+      <el-tooltip :content="$t('useragent.require_rtp_for_registrations')" placement="top">
         <el-switch
           v-model="form.requireRtpForRegistrations"
           on-color="#13ce66"
