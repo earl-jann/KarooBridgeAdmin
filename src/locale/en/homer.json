@@ -1,0 +1,26 @@
+{
+  "header" :
+  "Connection information for dumping packets to Homer SIP Capture service",
+
+  "homer_enabled":
+  "Enable the SIP Capture service",
+
+  "homer_version":
+  "Select a version (2 or 3)",
+
+  "homer_host":
+  "Address of the SIP Capture server",
+
+  "homer_port":
+  "Port for the SIP Capture Server",
+
+  "homer_password":
+  "Enter the SIP Capture Password",
+
+  "homer_compression":
+  "Enable this to Compress packets before sending",
+
+  "homer_id":
+  "Enter an Unique identifier"
+
+}

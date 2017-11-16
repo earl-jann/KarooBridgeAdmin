@@ -4,36 +4,48 @@
     <el-form-item label="SIP TCP Port Range" prop="sipTcpPortMax">
       <div class="input-inline">
           <el-form-item prop="sipTcpPortBase">
-            <el-input-number v-model="form.sipTcpPortBase" :min="1" :max="65535" @change=""></el-input-number>
+            <el-tooltip :content="$t('ports.sip_tcp_port_base')" placement="top">
+              <el-input-number v-model="form.sipTcpPortBase" :min="1" :max="65535" @change=""></el-input-number>
+            </el-tooltip>
           </el-form-item>
         </div>
         <div class="input-inline">
           <el-form-item>
-            <el-input-number v-model="form.sipTcpPortMax" :min="1" :max="65535" @change=""></el-input-number>
+            <el-tooltip :content="$t('ports.sip_tcp_port_max')" placement="top">
+              <el-input-number v-model="form.sipTcpPortMax" :min="1" :max="65535" @change=""></el-input-number>
+            </el-tooltip>
           </el-form-item>
       </div>
     </el-form-item>
     <el-form-item label="RTP Proxy Port Range" prop="rtpProxyPortMax">
       <div class="input-inline">
           <el-form-item prop="rtpProxyPortBase">
-            <el-input-number v-model="form.rtpProxyPortBase" :min="1" :max="65535" @change=""></el-input-number>
+            <el-tooltip :content="$t('ports.rtp_proxy_port_base')" placement="top">
+              <el-input-number v-model="form.rtpProxyPortBase" :min="1" :max="65535" @change=""></el-input-number>
+            </el-tooltip>
           </el-form-item>
         </div>
         <div class="input-inline">
           <el-form-item>
-            <el-input-number v-model="form.rtpProxyPortMax" :min="1" :max="65535" @change=""></el-input-number>
+            <el-tooltip :content="$t('ports.rtp_proxy_port_max')" placement="top">
+              <el-input-number v-model="form.rtpProxyPortMax" :min="1" :max="65535" @change=""></el-input-number>
+            </el-tooltip>
           </el-form-item>
       </div>
     </el-form-item>
     <el-form-item label="Transcoder Port Range" prop="transcoderPortMax">
       <div class="input-inline">
           <el-form-item prop="transcoderPortBase">
-            <el-input-number v-model="form.transcoderPortBase" :min="1" :max="65535" @change=""></el-input-number>
+            <el-tooltip :content="$t('ports.transcoder_port_base')" placement="top">
+              <el-input-number v-model="form.transcoderPortBase" :min="1" :max="65535" @change=""></el-input-number>
+            </el-tooltip>
           </el-form-item>
         </div>
         <div class="input-inline">
           <el-form-item>
-            <el-input-number v-model="form.transcoderPortMax" :min="1" :max="65535" @change=""></el-input-number>
+            <el-tooltip :content="$t('ports.transcoder_port_max')" placement="top">
+              <el-input-number v-model="form.transcoderPortMax" :min="1" :max="65535" @change=""></el-input-number>
+            </el-tooltip>
           </el-form-item>
       </div>
     </el-form-item>

@@ -14,10 +14,7 @@
       </el-form>
     </el-col>
     <el-table :data="listeners" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
       <el-table-column prop="id" label="Name" width="300" sortable>
-      </el-table-column>
       </el-table-column>
         <el-table-column prop="description" label="Description" width="250" sortable>
       </el-table-column>
@@ -47,24 +44,26 @@
           <el-input v-model="editForm.description" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="IP Address" prop="ipAddress">
-          <el-input v-model="editForm.ipAddress" auto-complete="off"></el-input>
+          <el-tooltip :content="$t('listeners.ip_address')" placement="top">
+            <el-input v-model="editForm.ipAddress" auto-complete="off"></el-input>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="Default">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="Default" prop="default">
+          <el-tooltip :content="$t('listeners.default_enabled')" placement="top">
             <el-switch
               v-model="editForm.default"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-text="Yes"
-              off-text="No">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="External Address">
-          <el-input type="textarea" v-model="editForm.externalAddress"></el-input>
+        <el-form-item label="External Address" prop="externalAddress">
+          <el-tooltip :content="$t('listeners.external_address')" placement="top">
+            <el-input type="textarea" v-model="editForm.externalAddress"></el-input>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="TCP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="TCP Enabled" prop="tcpEnabled">
+          <el-tooltip :content="$t('listeners.tcp_enabled')" placement="top">
             <el-switch
               v-model="editForm.tcpEnabled"
               on-color="#13ce66"
@@ -72,8 +71,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="UDP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="UDP Enabled" prop="udp_enabled">
+          <el-tooltip :content="$t('listeners.udp_enabled')" placement="top">
             <el-switch
               v-model="editForm.udpEnabled"
               on-color="#13ce66"
@@ -81,8 +80,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="Websocket Enabled" prop="wsEnabled">
+          <el-tooltip :content="$t('listeners.ws_enabled')" placement="top">
             <el-switch
               v-model="editForm.wsEnabled"
               on-color="#13ce66"
@@ -90,8 +89,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="Secure Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="Secure Websocket Enabled" prop="wssEnabled">
+          <el-tooltip :content="$t('listeners.wss_enabled')" placement="top">
             <el-switch
               v-model="editForm.wssEnabled"
               on-color="#13ce66"
@@ -99,8 +98,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="TLS Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="TLS Enabled" prop="tlsEnabled">
+          <el-tooltip :content="$t('listeners.tls_enabled')" placement="top">
             <el-switch
               v-model="editForm.tlsEnabled"
               on-color="#13ce66"
@@ -108,20 +107,30 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="SIP Port">
-          <el-input-number v-model="editForm.sipPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="SIP Port" prop="sipPort">
+          <el-tooltip :content="$t('listeners.sip_port')" placement="top">
+            <el-input-number v-model="editForm.sipPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="TLS Port">
-          <el-input-number v-model="editForm.tlsPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="TLS Port" prop="tlsPort">
+          <el-tooltip :content="$t('listeners.tls_port')" placement="top">
+            <el-input-number v-model="editForm.tlsPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="WS Port">
-          <el-input-number v-model="editForm.wsPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="WS Port" prop="wsPort">
+          <el-tooltip :content="$t('listeners.ws_port')" placement="top">
+            <el-input-number v-model="editForm.wsPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="WSS Port">
-          <el-input-number v-model="editForm.wssPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="WSS Port" prop="wssPort">
+          <el-tooltip :content="$t('listeners.wss_port')" placement="top">
+            <el-input-number v-model="editForm.wssPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="Subnets">
-          <el-input type="textarea" v-model="editForm.subnets"></el-input>
+        <el-form-item label="Subnets" prop="subnets">
+          <el-tooltip :content="$t('listeners.subnets')" placement="top">
+            <el-input type="textarea" v-model="editForm.subnets"></el-input>
+          </el-tooltip>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -139,24 +148,26 @@
           <el-input v-model="addForm.description" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="IP Address" prop="ipAddress">
-          <el-input v-model="addForm.ipAddress" auto-complete="off"></el-input>
+          <el-tooltip :content="$t('listeners.ip_address')" placement="top">
+            <el-input v-model="addForm.ipAddress" auto-complete="off"></el-input>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="Default">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="Default" prop="default">
+          <el-tooltip :content="$t('listeners.default_enabled')" placement="top">
             <el-switch
               v-model="addForm.default"
               on-color="#13ce66"
-              off-color="#ff4949"
-              on-text="Yes"
-              off-text="No">
+              off-color="#ff4949">
             </el-switch>
           </el-tooltip>
         </el-form-item>
         <el-form-item label="External Address" prop="externalAddress">
-          <el-input type="textarea" v-model="addForm.externalAddress"></el-input>
+          <el-tooltip :content="$t('listeners.external_address')" placement="top">
+            <el-input type="textarea" v-model="addForm.externalAddress"></el-input>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="TCP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="TCP Enabled" prop="tcpEnabled">
+          <el-tooltip :content="$t('listeners.tcp_enabled')" placement="top">
             <el-switch
               v-model="addForm.tcpEnabled"
               on-color="#13ce66"
@@ -164,8 +175,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="UDP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="UDP Enabled" prop="udp_enabled">
+          <el-tooltip :content="$t('listeners.udp_enabled')" placement="top">
             <el-switch
               v-model="addForm.udpEnabled"
               on-color="#13ce66"
@@ -173,8 +184,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="Websocket Enabled" prop="wsEnabled">
+          <el-tooltip :content="$t('listeners.ws_enabled')" placement="top">
             <el-switch
               v-model="addForm.wsEnabled"
               on-color="#13ce66"
@@ -182,8 +193,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="Secure Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="Secure Websocket Enabled" prop="wssEnabled">
+          <el-tooltip :content="$t('listeners.wss_enabled')" placement="top">
             <el-switch
               v-model="addForm.wssEnabled"
               on-color="#13ce66"
@@ -191,8 +202,8 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="TLS Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+        <el-form-item label="TLS Enabled" prop="tlsEnabled">
+          <el-tooltip :content="$t('listeners.tls_enabled')" placement="top">
             <el-switch
               v-model="addForm.tlsEnabled"
               on-color="#13ce66"
@@ -200,20 +211,30 @@
             </el-switch>
           </el-tooltip>
         </el-form-item>
-        <el-form-item label="SIP Port">
-          <el-input-number v-model="addForm.sipPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="SIP Port" prop="sipPort">
+          <el-tooltip :content="$t('listeners.sip_port')" placement="top">
+            <el-input-number v-model="addForm.sipPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="TLS Port">
-          <el-input-number v-model="addForm.tlsPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="TLS Port" prop="tlsPort">
+          <el-tooltip :content="$t('listeners.tls_port')" placement="top">
+            <el-input-number v-model="addForm.tlsPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="WS Port">
-          <el-input-number v-model="addForm.wsPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="WS Port" prop="wsPort">
+          <el-tooltip :content="$t('listeners.ws_port')" placement="top">
+            <el-input-number v-model="addForm.wsPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="WSS Port">
-          <el-input-number v-model="addForm.wssPort" :min="1" :max="65535"></el-input-number>
+        <el-form-item label="WSS Port" prop="wssPort">
+          <el-tooltip :content="$t('listeners.wss_port')" placement="top">
+            <el-input-number v-model="addForm.wssPort" :min="1" :max="65535"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="Subnets">
-          <el-input type="textarea" v-model="addForm.subnets"></el-input>
+        <el-form-item label="Subnets" prop="subnets">
+          <el-tooltip :content="$t('listeners.subnets')" placement="top">
+            <el-input type="textarea" v-model="addForm.subnets"></el-input>
+          </el-tooltip>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -323,7 +344,7 @@
       },
 
       getListeners() {
-        // {"where":{"id":"earl"}}
+        // sample: {"where":{"id":"LISTENER_ID"}}
         // filter[where][property]=value
         // const params = {
         //   page: this.page,

@@ -1,0 +1,19 @@
+{
+"user_agent_name": 
+"Show your appreciation by not changing this value",
+
+"register_state_in_contact_params":
+"Karoo bridge uses the contact header to store some states about sip session. It can either do this by storing a unique id as the user info of the contact_uri or by storing it as a contact parameter for REGISTER. Mid_dialog states are also stored using the contact parameters. If the value is set to false, Karoo will insert a record route header instead.  If your switch/pbx supports parameters in contact, enabling this is recommended.",
+
+"dialog_state_in_contact_params":
+"Karoo bridge uses the contact header to store some states about sip session. It can either do this by storing a unique id as the user info of the contact_uri or by storing it as a contact parameter for REGISTER. Mid_dialog states are also stored using the contact parameters. If the value is set to false, Karoo will insert a record route header instead.  If your switch/pbx supports parameters in contact, enabling this is recommended.",
+
+"enable_options_routing":
+"OPTIONS request are normally used by edge devices to maintain NAT. Starting 1.4, Karoo bridge will automatically send an ok response to OPTIONS to avoid the over head of these requests reaching the routing module.If you want to have a handle on options routing, you must enable this.", 
+
+"disable_options_keep_alive":
+"By default, Karoo Bridge will send OPTIONS requests to all registered endpoints every 5 seconds.Set this value to true to disable it",
+
+"require_rtp_for_registrations":
+"If set to true, all calls to registered user agents will require an rtp proxy.The current default value is true because there are a lot of user agents that send the public ip even if it is behind a symmetric NAT which will not work without rtp proxy.Unless you know that all user agents will send a private contact when inside a symmetric NAT, leave the value of this parameter to true."
+}

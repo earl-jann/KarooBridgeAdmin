@@ -1,8 +1,10 @@
 <template>
 	<el-form ref="form" :model="form" label-width="80px" @submit.prevent="onSubmit" style="margin:20px;width:60%;min-width:600px;" :rules="formRules" v-loading="formLoading">
         <el-input type="hidden" v-model="form.id"></el-input>
+        <i class="el-icon-information"> </i>
+        <em>{{ $t('carp.header') }}</em>
         <el-form-item label="Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+          <el-tooltip :content="$t('carp.enabled')" placement="top">
             <el-switch
               v-model="form.enabled"
               on-color="#13ce66"
@@ -12,41 +14,53 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="Virtual IP Address" prop="virtualIpAddress">
-          <el-input v-model="form.virtualIpAddress" auto-complete="off"
-          :disabled="disabled"></el-input>
+          <el-tooltip :content="$t('carp.virtual_ip_address')" placement="top">
+            <el-input v-model="form.virtualIpAddress" auto-complete="off"
+            :disabled="disabled"></el-input>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Interface Name" prop="interfaceName">
-          <el-input v-model="form.interfaceName" auto-complete="off"
-            disabled></el-input>
+          <el-tooltip :content="$t('carp.interface_name')" placement="top">
+            <el-input v-model="form.interfaceName" auto-complete="off"
+              disabled></el-input>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Description" prop="description">
-          <el-input v-model="form.description" auto-complete="off"
-            disabled></el-input>
+          <el-tooltip :content="$t('carp.description')" placement="top">
+            <el-input v-model="form.description" auto-complete="off"
+              disabled></el-input>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Source IP Address" prop="sourceAddress">
-          <el-select v-model="sourceAddress" placeholder="Select"
-          :loading='sourceAddressLoading' @change='assignListenerValuesToForm'>
-            <el-option
-              v-for="item in sourceAddresses"
-              :key="item.id"
-              :label="item.ipAddress + ':' + item.description"
-              :value="item.ipAddress"
-              :disabled="disabled">
-            </el-option>
-          </el-select>
+          <el-tooltip :content="$t('carp.src_address')" placement="top">
+            <el-select v-model="sourceAddress" placeholder="Select"
+            :loading='sourceAddressLoading' @change='assignListenerValuesToForm'>
+              <el-option
+                v-for="item in sourceAddresses"
+                :key="item.id"
+                :label="item.ipAddress + ':' + item.description"
+                :value="item.ipAddress"
+                :disabled="disabled">
+              </el-option>
+            </el-select>
+          </el-tooltip>
         </el-form-item>
         <el-input type="hidden" v-model="form.upScript"></el-input>
         <el-input type="hidden" v-model="form.downScript"></el-input>
         <el-form-item label="CARP Password" prop="carpPassword">
-          <el-input type="password" v-model="form.carpPassword" auto-complete="off"
-          :disabled="disabled"></el-input>
+          <el-tooltip :content="$t('carp.carp_password')" placement="top">
+            <el-input type="password" :maxlength="16" v-model="form.carpPassword" auto-complete="off"
+            :disabled="disabled"></el-input>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="VHID" prop="vhid">
-          <el-input-number v-model="form.vhid" :min="1" :max="255"
-          :disabled="disabled"></el-input-number>
+          <el-tooltip :content="$t('carp.vhid')" placement="top">
+            <el-input-number v-model="form.vhid" :min="1" :max="255"
+            :disabled="disabled"></el-input-number>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Preferred Master">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+          <el-tooltip :content="$t('carp.preferred_master')" placement="top">
             <el-switch
               v-model="form.preferredMaster"
               on-color="#13ce66"
@@ -56,11 +70,13 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="External Address">
-          <el-input type="textarea" v-model="form.externalAddress"
-          :disabled="disabled"></el-input>
+          <el-tooltip :content="$t('carp.external_address')" placement="top">
+            <el-input type="textarea" v-model="form.externalAddress"
+            :disabled="disabled"></el-input>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="TCP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+          <el-tooltip :content="$t('carp.tcp_enabled')" placement="top">
             <el-switch
               v-model="form.tcpEnabled"
               on-color="#13ce66"
@@ -70,7 +86,7 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="UDP Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+          <el-tooltip :content="$t('carp.udp_enabled')" placement="top">
             <el-switch
               v-model="form.udpEnabled"
               on-color="#13ce66"
@@ -80,7 +96,7 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+          <el-tooltip :content="$t('carp.ws_enabled')" placement="top">
             <el-switch
               v-model="form.wsEnabled"
               on-color="#13ce66"
@@ -90,7 +106,7 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="Secure Websocket Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+          <el-tooltip :content="$t('carp.wss_enabled')" placement="top">
             <el-switch
               v-model="form.wssEnabled"
               on-color="#13ce66"
@@ -100,7 +116,7 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="TLS Enabled">
-          <el-tooltip :content="'Toggle to enable/disable'" placement="top">
+          <el-tooltip :content="$t('carp.tls_enabled')" placement="top">
             <el-switch
               v-model="form.tlsEnabled"
               on-color="#13ce66"
@@ -110,23 +126,33 @@
           </el-tooltip>
         </el-form-item>
         <el-form-item label="SIP Port">
-          <el-input-number v-model="form.sipPort" :min="1" :max="65535"
-          :disabled="true"></el-input-number>
+          <el-tooltip :content="$t('carp.sip_port')" placement="top">
+            <el-input-number v-model="form.sipPort" :min="1" :max="65535"
+            :disabled="true"></el-input-number>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="TLS Port">
-          <el-input-number v-model="form.tlsPort" :min="1" :max="65535"
-          :disabled="true"></el-input-number>
+          <el-tooltip :content="$t('carp.tls_port')" placement="top">
+            <el-input-number v-model="form.tlsPort" :min="1" :max="65535"
+            :disabled="true"></el-input-number>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="WS Port">
-          <el-input-number v-model="form.wsPort" :min="1" :max="65535"
-          :disabled="true"></el-input-number>
+          <el-tooltip :content="$t('carp.ws_port')" placement="top">
+            <el-input-number v-model="form.wsPort" :min="1" :max="65535"
+            :disabled="true"></el-input-number>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="WSS Port">
-          <el-input-number v-model="form.wssPort" :min="1" :max="65535"
-          :disabled="true"></el-input-number>
+          <el-tooltip :content="$t('carp.wss_port')" placement="top">
+            <el-input-number v-model="form.wssPort" :min="1" :max="65535"
+            :disabled="true"></el-input-number>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="Subnets">
-          <el-input type="textarea" v-model="form.subnets" :disabled="true"></el-input>
+          <el-tooltip :content="$t('carp.subnets')" placement="top">
+            <el-input type="textarea" v-model="form.subnets" :disabled="true"></el-input>
+          </el-tooltip>
         </el-form-item>
 
     <el-form-item>

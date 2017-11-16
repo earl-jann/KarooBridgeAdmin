@@ -1,0 +1,7 @@
+{
+"default_interface_address" :
+"The default interface address used to send out requests if not explicitly set using the java script sendInterfaceAddress() function.This is also used by Karoo Bridge command line utilities like the --reset-log-level to send the SIP RPC request to the running Karoo Bridge instance.",
+
+"default_interface_port" :
+"The default interface port used to send out requests if not explicitly set using the java script sendInterfacePort() function"
+}

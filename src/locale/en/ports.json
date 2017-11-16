@@ -1,0 +1,19 @@
+{
+  "sip_tcp_port_base":
+  "The low value marker for the TCP client port range",
+
+  "sip_tcp_port_max":
+  "The high value marker for the TCP client port range",
+
+  "rtp_proxy_port_base":
+  "The low value marker for the RTP proxy port range",
+
+  "rtp_proxy_port_max":
+  "The high value marker for the RTP proxy port range",
+
+  "transcoder_port_base":
+  "The low value marker for the Transcoder port range",
+
+  "transcoder_port_max":
+  "The high value marker for the Transcoder port range"
+}
