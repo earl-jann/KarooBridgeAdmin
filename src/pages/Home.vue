@@ -13,7 +13,7 @@
         <el-dropdown trigger="hover">
           <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>Setup</el-dropdown-item>
+            <el-dropdown-item @click.native="generate">Generate</el-dropdown-item>
             <el-dropdown-item divided @click.native="logout">Logout</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -72,6 +72,8 @@
 
 <script>
   import Vue from 'vue';
+  import util from '@/common/js/util';
+  import ConfigProxy from '@/proxies/ConfigProxy';
 
   export default {
     data() {
@@ -103,6 +105,23 @@
         // console.log('handleclose');
       },
       handleselect(a, b) {
+      },
+
+      generate() {
+        new ConfigProxy().generate({ id: 1 }).then((response) => {
+          // NProgress.done();
+          this.$message({
+            message: 'Success',
+            type: 'success',
+          });
+        }).catch((error) => {
+          Vue.console.error('Error: ' + error);
+          this.$message({
+            showClose: true,
+            message: 'Generate Failed.',
+            type: 'error',
+          });
+        });
       },
 
       logout() {

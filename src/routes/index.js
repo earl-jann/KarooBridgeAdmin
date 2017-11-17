@@ -37,6 +37,7 @@ export default [
         { path: '/autoban-packet-rate-whitelist', component: require('@/pages/listener/autoban_packet_rate_whitelist.vue'), name: 'Packet Rate Whitelist' },
         { path: '/firewall-rules', component: require('@/pages/listener/firewall_rules.vue'), name: 'Firewall Rules' },
         { path: '/port-ranges', component: require('@/pages/listener/port_ranges.vue'), name: 'Port Ranges' },
+        { path: '/rtp-proxy', component: require('@/pages/listener/rtp_proxy.vue'), name: 'RTP Proxy' },
     ],
     // If the user needs to be authenticated to view this page
     meta: {

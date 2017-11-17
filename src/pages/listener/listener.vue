@@ -308,9 +308,6 @@
           id: [
           { required: true, message: 'Please enter a valid name', trigger: 'blur' },
           ],
-          externalAddress: [
-          { required: true, message: 'Please enter a valid external address', trigger: 'blur' },
-          ],
           ipAddress: [
           { validator: validateIpAddress, trigger: 'blur' },
           ],

@@ -1,5 +1,5 @@
 /* ::::::::::::
- * Listener Transformer
+ * DomainLimitsTransformer
  * ::::::::::::
  *
  * The transformer for the object.

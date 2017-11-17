@@ -25,10 +25,9 @@
         <el-input v-model="form.homerHost" auto-complete="off"></el-input>
       </el-tooltip>
     </el-form-item>
-    <el-form-item label="Homer Port">
+    <el-form-item label="Homer Port" prop="homerPort">
       <el-tooltip :content="$t('homer.homer_port')" placement="top">
-        <el-input-number v-model="form.homerPort" :min="1" :max="65535"
-          @change=""></el-input-number>
+        <el-input-number v-model="form.homerPort" :min="1" :max="65535"></el-input-number>
       </el-tooltip>
     </el-form-item>
     <el-form-item label="Homer Password" prop="homerPassword">
@@ -36,7 +35,7 @@
         <el-input type="password" v-model="form.homerPassword" auto-complete="off"></el-input>
       </el-tooltip>
     </el-form-item>
-    <el-form-item label="Homer Compression">
+    <el-form-item label="Homer Compression" prop="homerCompression">
       <el-tooltip :content="$t('homer.homer_compression')" placement="top">
         <el-switch
           v-model="form.homerCompression"
@@ -47,7 +46,7 @@
     </el-form-item>
     <el-form-item label="Homer Id" prop="homerId">
       <el-tooltip :content="$t('homer.homer_id')" placement="top">
-        <el-input v-model="form.homerId" auto-complete="off"></el-input>
+        <el-input-number v-model.number="form.homerId" :min="1" :max="9999"></el-input-number>
       </el-tooltip>
     </el-form-item>
     <el-form-item>
@@ -69,10 +68,10 @@
           homerEnabled: false,
           homerVersion: 0,
           homerHost: '',
-          homerPort: 0,
+          homerPort: 1,
           homerPassword: '',
           homerCompression: false,
-          homerId: '',
+          homerId: 1,
         },
         formRules: {
           homerVersion: [
@@ -82,10 +81,10 @@
           { required: true, message: 'Please enter a valid Homer Host', trigger: 'blur' },
           ],
           homerPort: [
-          { required: true, message: 'Please enter a valid Homer Port', trigger: 'blur' },
+          { type: 'number', message: 'Please enter a valid Homer Id', trigger: 'blur' },
           ],
           homerId: [
-          { required: true, message: 'Please enter a valid Homer Id', trigger: 'blur' },
+          { type: 'number', message: 'Please enter a valid Homer Id', trigger: 'blur' },
           ],
         },
         formLoading: true,

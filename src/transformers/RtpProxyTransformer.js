@@ -1,5 +1,5 @@
 /* ::::::::::::
- * PacketRateWhitelistTransformer
+ * Rtp Proxy Transformer
  * ::::::::::::
  *
  * The transformer for the object.
@@ -7,7 +7,7 @@
 
 import Transformer from './Transformer';
 
-export default class PacketRateWhitelistTransformer extends Transformer {
+export default class RtpProxyTransformer extends Transformer {
 
   /**
    * Method used to transform a fetched object
@@ -19,8 +19,8 @@ export default class PacketRateWhitelistTransformer extends Transformer {
   static fetch(object) {
     return {
       id: object.id,
-      address: object.address,
-      type: object.type,
+      rtpProxyReadTimeout: object.rtp_proxy_read_timeout,
+      rtpProxyTransportThreadCount: object.rtp_proxy_transport_thread_count,
     };
   }
 
@@ -34,8 +34,8 @@ export default class PacketRateWhitelistTransformer extends Transformer {
   static send(object) {
     return {
       id: object.id,
-      address: object.address,
-      type: object.type,
+      rtp_proxy_read_timeout: object.rtpProxyReadTimeout,
+      rtp_proxy_transport_thread_count: object.rtpProxyTransportThreadCount,
     };
   }
 }

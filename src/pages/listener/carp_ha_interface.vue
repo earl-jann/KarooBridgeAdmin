@@ -234,9 +234,6 @@
           carpPassword: [
           { required: true, message: 'Please enter a valid password', trigger: 'blur' },
           ],
-          vhid: [
-          { required: true, message: 'Please enter a valid vhid', trigger: 'blur' },
-          ],
         },
         disabled: false,
         formLoading: true,

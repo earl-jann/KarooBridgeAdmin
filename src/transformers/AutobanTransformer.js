@@ -1,5 +1,5 @@
 /* ::::::::::::
- * Listener Transformer
+ * Autoban Transformer
  * ::::::::::::
  *
  * The transformer for the object.

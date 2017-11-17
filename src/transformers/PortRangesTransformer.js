@@ -1,5 +1,5 @@
 /* ::::::::::::
- * Listener Transformer
+ * PortRangesTransformer
  * ::::::::::::
  *
  * The transformer for the object.

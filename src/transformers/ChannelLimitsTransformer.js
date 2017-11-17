@@ -1,5 +1,5 @@
 /* ::::::::::::
- * Listener Transformer
+ * ChannelLimitsTransformer
  * ::::::::::::
  *
  * The transformer for the object.
