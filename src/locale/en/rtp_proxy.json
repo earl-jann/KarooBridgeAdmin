@@ -1,0 +1,7 @@
+{
+ "read_timeout":
+ "The read timeout for RTP Proxy before it decides to automatically tear down the RTP channel. This is expressed in seconds.",
+
+ "transport_thread_count":
+ "The number of worker threads for the RTP proxy.Take note that Karoo Bridge uses async IO and the number here does not limit the number of RTP channels that can be supported.This thread pool will be shared equally by all RTP channels.10 threads has been tested to be enough to cater to 1000 RTP proxy sessions."
+}
