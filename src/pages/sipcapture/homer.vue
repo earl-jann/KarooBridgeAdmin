@@ -15,8 +15,8 @@
     <el-form-item label="Homer Version" prop="homerVersion">
       <el-tooltip :content="$t('homer.homer_version')" placement="top">
         <el-radio-group v-model="form.homerVersion">
-          <el-radio-button label="1">Version 1</el-radio-button>
           <el-radio-button label="2">Version 2</el-radio-button>
+          <el-radio-button label="3">Version 3</el-radio-button>
         </el-radio-group>
       </el-tooltip>
     </el-form-item>

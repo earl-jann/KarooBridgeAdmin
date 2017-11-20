@@ -1,6 +1,6 @@
 {
   "name": "karoobridge-admin-ui",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A boilerplate for medium to large Vue 2 single page applications",
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -34,9 +34,11 @@
   "dependencies": {
     "axios": "^0.16.1",
     "bootstrap": "^3.3.7",
+    "brace": "^0.11.0",
     "debug": "^3.0.1",
     "element-theme-default": "^1.4.9",
-    "element-ui": "^1.4.9",
+    "element-ui": "^1.4.11",
+    "emmet": "^1.6.3",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "mockjs": "^1.0.1-beta3",
@@ -49,7 +51,7 @@
     "vue-router": "^2.5.1",
     "vue2-ace-editor": "0.0.3",
     "vuex": "^2.3.1",
-    "vuex-persistedstate": "^2.3.1",
+    "vuex-persistedstate": "^2.4.2",
     "vuex-router-sync": "^4.1.2"
   },
   "devDependencies": {

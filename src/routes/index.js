@@ -64,8 +64,10 @@ export default [
     name: 'Routing',
     iconClass: 'el-icon-setting',
     children: [
-        { path: '/profiles', component: require('@/pages/routing/domains.vue'), name: 'Profiles' },
-        { path: '/advanced', component: require('@/pages/routing/domains.vue'), name: 'Advanced Modules' },
+      { path: '/domain-profiles', component: require('@/pages/routing/domain_profiles.vue'), name: 'Domains' },
+      { path: '/dp-scripts/:id', component: require('@/pages/routing/domain_profiles_scripts.vue'), name: 'Domain Profile Scripts', hidden: true },
+      { path: '/gateway-profiles', component: require('@/pages/routing/gateway_profiles.vue'), name: 'Gateways' },
+      { path: '/gp-scripts/:id', component: require('@/pages/routing/gateway_profiles_scripts.vue'), name: 'Gateway Profile Scripts', hidden: true },
     ],
     // If the user needs to be authenticated to view this page
     meta: {
