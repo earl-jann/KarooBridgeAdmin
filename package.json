@@ -1,16 +1,15 @@
 {
   "name": "karoobridge-admin-ui",
   "version": "0.0.1",
-  "description": "A boilerplate for medium to large Vue 2 single page applications",
+  "description": "Karoo Bridge Admin UI based on Vue2 Boilerplate.",
   "scripts": {
     "dev": "node build/dev-server.js",
-    "dev-mock": "set MOCK_SERVICES=true && node build/dev-server.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/petervmeijgaard/vue-2-boilerplate.git"
+    "url": "git+https://github.com/earl-jann/KarooBridgeAdmin.git"
   },
   "keywords": [
     "Vue",
@@ -23,14 +22,15 @@
     "SPA",
     "Single",
     "Page",
-    "Application"
+    "Application",
+    "KarooBridge"
   ],
-  "author": "Peter van Meijgaard <petervanmeijgaard@hotmail.com>",
+  "author": "Earl Jann Tormes <earljanntormes@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/petervmeijgaard/vue-2-boilerplate/issues"
+    "url": "https://github.com/earl-jann/KarooBridgeAdmin.git"
   },
-  "homepage": "https://github.com/petervmeijgaard/vue-2-boilerplate#readme",
+  "homepage": "https://github.com/earl-jann/KarooBridgeAdmin#readme",
   "dependencies": {
     "axios": "^0.16.1",
     "bootstrap": "^3.3.7",
