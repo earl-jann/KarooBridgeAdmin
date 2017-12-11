@@ -9,7 +9,9 @@ import * as autoban from './autoban.json';
 import * as carp from './carp.json';
 import * as channelLimits from './channel_limits.json';
 import * as defaultInterface from './default_interface.json';
+import * as domainProfiles from './domain_profiles.json';
 import * as firewall from './firewall.json';
+import * as gatewayProfiles from './gateway_profiles.json';
 import * as homer from './homer.json';
 import * as listeners from './listeners.json';
 import * as ports from './ports.json';
@@ -24,7 +26,9 @@ export default {
   carp,
   channelLimits,
   defaultInterface,
+  domainProfiles,
   firewall,
+  gatewayProfiles,
   homer,
   listeners,
   ports,

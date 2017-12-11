@@ -2,7 +2,7 @@
 <!-- NEW ADD DELETE DOWNLOAD HELP -->
 <!-- SAVE CLOSE SHOW/HIDE SETTINGS HELP -->
   <section>
-    <div class="inline">
+    <!-- <div class="inline">
       <el-select v-model="value5" multiple placeholder="Select Script">
         <el-option
           v-for="item in options"
@@ -11,7 +11,7 @@
           :value="item.value">
         </el-option>
       </el-select>
-    </div>
+    </div> -->
     <div class="inline" style="margin-bottom: 20px;">
       <el-button
         size="small"
@@ -27,7 +27,7 @@
       >
         Save Script
       </el-button>
-      <el-button
+      <!-- <el-button
         size="small"
         @click=""
         icon="delete"
@@ -40,7 +40,7 @@
         icon="download"
       >
         Download Script
-      </el-button>
+      </el-button> -->
     </div>
 
 
@@ -52,7 +52,7 @@
         :name="item.name"
       >
         {{item.content}}
-        <editor v-model="content" @init="initEditor" lang="html" theme="chrome" width="500" height="100"></editor>
+        <!-- <editor v-model="content" @init="initEditor" lang="html" theme="chrome" width="500" height="100"></editor> -->
 
       </el-tab-pane>
     </el-tabs>
@@ -66,13 +66,13 @@
         content: '',
         editableTabsValue2: '2',
         editableTabs2: [{
-          title: 'Script 1',
+          title: 'Routes',
           name: '1',
-          content: 'Script 1 content',
+          content: 'Routes content',
         }, {
-          title: 'Script 2',
+          title: 'Rules',
           name: '2',
-          content: 'Script 2 content',
+          content: 'Rules content',
         }],
         tabIndex: 2,
         options: [{
@@ -95,7 +95,7 @@
       };
     },
     components: {
-      editor: require('vue2-ace-editor'),
+      // editor: require('vue2-ace-editor'),
     },
     methods: {
       initEditor(editor) {

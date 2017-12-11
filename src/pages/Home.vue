@@ -11,7 +11,7 @@
       </el-col>
       <el-col :span="4" class="userinfo">
         <el-dropdown trigger="hover">
-          <span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+          <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="generate">Generate</el-dropdown-item>
             <el-dropdown-item divided @click.native="logout">Logout</el-dropdown-item>
