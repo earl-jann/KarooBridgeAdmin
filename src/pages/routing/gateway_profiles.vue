@@ -46,7 +46,10 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-input v-model="editForm.id" type="hidden"></el-input>
+        <div v-show="show">
+          <el-input v-model="editForm.id" type="hidden"></el-input>
+          <el-input v-model="editForm.properties" type="hidden"></el-input>
+        </div>
         <el-form-item label="Gateway Name" prop="gatewayName">
           <el-input v-model="editForm.gatewayName"></el-input>
         </el-form-item>
@@ -62,7 +65,10 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-input v-model="addForm.id" type="hidden"></el-input>
+        <div v-show="show">
+          <el-input v-model="addForm.id" type="hidden"></el-input>
+          <el-input v-model="addForm.properties" type="hidden"></el-input>
+        </div>
         <el-form-item label="Gateway Name" prop="gatewayName">
           <el-input v-model="addForm.gatewayName" auto-complete="off"></el-input>
         </el-form-item>
@@ -90,6 +96,7 @@
         filters: {
           gatewayName: '',
         },
+        show: false,
         objects: [],
         total: 0,
         page: 1,
@@ -107,6 +114,7 @@
           id: '',
           gatewayName: '',
           description: '',
+          properties: '',
         },
 
         addFormVisible: false,
@@ -121,6 +129,7 @@
           id: '',
           gatewayName: '',
           description: '',
+          properties: '',
         },
       };
     },

@@ -1,5 +1,5 @@
 <template>
-    <div :key="key" :style="{height: height ? px(height) : '100%',width: width ? px(width) : '100%'}">
+    <div :identifier="identifier" :style="{height: height ? px(height) : '100%',width: width ? px(width) : '100%'}">
 
     </div>
 </template>
@@ -17,7 +17,7 @@ export default {
     theme: String,
     height: true,
     width: true,
-    key: String,
+    identifier: String,
   },
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
 
     const editor = (vm.editor = ace.edit(this.$el));
 
-    editor.key = this.key;
+    editor.identifier = this.identifier;
 
     this.$emit('init', editor);
 

@@ -23,6 +23,7 @@ export default class DomainProfileTransformer extends Transformer {
       description: object.description,
       routes: object.routes,
       rules: object.rules,
+      inbound: object.inbound,
     };
   }
 
@@ -40,6 +41,7 @@ export default class DomainProfileTransformer extends Transformer {
       description: object.description,
       routes: object.routes,
       rules: object.rules,
+      inbound: object.inbound,
     };
   }
 }

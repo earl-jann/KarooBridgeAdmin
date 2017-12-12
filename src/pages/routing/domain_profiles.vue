@@ -46,7 +46,12 @@
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-        <el-input v-model="editForm.id" type="hidden"></el-input>
+        <div v-show="show">
+          <el-input v-model="editForm.id" type="hidden"></el-input>
+          <el-input v-model="editForm.rules" type="hidden"></el-input>
+          <el-input v-model="editForm.routes" type="hidden"></el-input>
+          <el-input v-model="editForm.inbound" type="hidden"></el-input>
+        </div>
         <el-form-item label="Domain Name" prop="domainName">
           <el-input v-model="editForm.domainName"></el-input>
         </el-form-item>
@@ -62,7 +67,12 @@
 
     <el-dialog title="New" v-model="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-        <el-input v-model="addForm.id" type="hidden"></el-input>
+        <div v-show="show">
+          <el-input v-model="addForm.id" type="hidden"></el-input>
+          <el-input v-model="addForm.rules" type="hidden"></el-input>
+          <el-input v-model="addForm.routes" type="hidden"></el-input>
+          <el-input v-model="addForm.inbound" type="hidden"></el-input>
+        </div>
         <el-form-item label="Domain Name" prop="domainName">
           <el-input v-model="addForm.domainName" auto-complete="off"></el-input>
         </el-form-item>
@@ -90,6 +100,7 @@
         filters: {
           domainName: '',
         },
+        show: false,
         objects: [],
         total: 0,
         page: 1,
@@ -107,6 +118,9 @@
           id: '',
           domainName: '',
           description: '',
+          rules: '',
+          routes: '',
+          inbound: '',
         },
 
         addFormVisible: false,
@@ -121,6 +135,9 @@
           id: '',
           domainName: '',
           description: '',
+          rules: '',
+          routes: '',
+          inbound: '',
         },
       };
     },
