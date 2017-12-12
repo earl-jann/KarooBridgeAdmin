@@ -8,7 +8,7 @@
           </el-button>
         </el-tooltip>
       </div>
-      <div class="input-inline">
+      <div class="input-inline" v-show="show">
         <el-input type="hidden" v-model="form.id"></el-input>
         <el-input type="hidden" v-model="form.description"></el-input>
         <el-input type="hidden" v-model="form.domainName"></el-input>
@@ -24,10 +24,13 @@
       </el-form-item>
       <el-tabs v-model="activeTab" type="border-card">
         <el-tab-pane label="Rules" name="rulesTab"> 
-          <editor key="rulesTab" v-model="form.rules" @init="initEditor" lang="javascript" theme="chrome" width="600" height="400"></editor>
+          <editor identifier="rulesTab" v-model="form.rules" @init="initEditor" lang="javascript" theme="chrome" width="600" height="400"></editor>
         </el-tab-pane>
         <el-tab-pane label="Routes" name="routesTab"> 
-          <editor key="routesTab" v-model="form.routes" @init="initEditor" lang="javascript" theme="chrome" width="500" height="400"></editor>
+          <editor identifier="routesTab" v-model="form.routes" @init="initEditor" lang="javascript" theme="chrome" width="500" height="400"></editor>
+        </el-tab-pane>
+        <el-tab-pane label="Inbound" name="inboundTab"> 
+          <editor identifier="inboundTab" v-model="form.inbound" @init="initEditor" lang="javascript" theme="chrome" width="500" height="400"></editor>
         </el-tab-pane>
       </el-tabs>
     </section>
@@ -55,7 +58,9 @@
         let hasError = false;
         for (let i = 0; i < this.editors.length; i++) {
           const tempResult = checkEditor(this.editors[i], callback);
-          if (tempResult !== 'undefined') {
+          if (typeof tempResult !== 'undefined'
+            && tempResult !== 'undefined') {
+            Vue.console.log('tempResult: ' + tempResult);
             hasError = true;
           }
         }
@@ -71,7 +76,9 @@
           description: '',
           rules: '',
           routes: '',
+          inbound: '',
         },
+        show: false,
         activeTab: 'rulesTab',
         formLoading: true,
         formRules: {
@@ -104,6 +111,9 @@
             }
             if (!this.form.rules) {
               this.form.rules = '';
+            }
+            if (!this.form.inbound) {
+              this.form.inbound = '';
             }
             // this.form = response;
           } else {

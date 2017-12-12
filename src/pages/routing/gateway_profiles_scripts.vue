@@ -24,7 +24,7 @@
       </el-form-item>
       <el-tabs v-model="activeTab" type="border-card">
         <el-tab-pane label="Properties" name="propertiesTab"> 
-          <editor key="propertiesTab" v-model="form.properties" @init="initEditor" lang="javascript" theme="chrome" width="600" height="400"></editor>
+          <editor identifier="propertiesTab" v-model="form.properties" @init="initEditor" lang="javascript" theme="chrome" width="600" height="400"></editor>
         </el-tab-pane>
       </el-tabs>
     </section>
@@ -52,7 +52,8 @@
         let hasError = false;
         for (let i = 0; i < this.editors.length; i++) {
           const tempResult = checkEditor(this.editors[i], callback);
-          if (tempResult !== 'undefined') {
+          if (typeof tempResult !== 'undefined'
+            && tempResult !== 'undefined') {
             hasError = true;
           }
         }
