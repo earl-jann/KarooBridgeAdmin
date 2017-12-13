@@ -127,6 +127,15 @@ class BaseProxy {
   }
 
   /**
+   * Method used to count items from the API.
+   *
+   * @returns {Promise} The result in a promise.
+   */
+  count() {
+    return this.submit('get', `/${this.endpoint}/count`, this.transformer.fetchCount);
+  }
+
+  /**
    * Method used to fetch a single item from the API.
    *
    * @param {int} id The given identifier.

@@ -29,4 +29,14 @@ export default class Transformer {
   static sendCollection(items) {
     return items.map(item => this.send(item));
   }
+
+  /**
+   * Method used to transform a count response
+   *
+   * @param data
+   * @returns {number} the count
+   */
+  static fetchCount(data) {
+    return data.count;
+  }
 }

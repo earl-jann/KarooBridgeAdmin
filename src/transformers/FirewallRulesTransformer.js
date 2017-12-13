@@ -23,6 +23,7 @@ export default class FirewallRulesTransformer extends Transformer {
       portBase: object.port_base,
       portMax: object.port_max,
       type: object.type,
+      interfaceName: object.interface_name,
     };
   }
 
@@ -40,6 +41,7 @@ export default class FirewallRulesTransformer extends Transformer {
       port_base: object.portBase,
       port_max: object.portMax,
       type: object.type,
+      interface_name: object.interfaceName,
     };
   }
 }

@@ -1,3 +1,5 @@
 {
- "header": "By default, Karoo does not manage the firewall. If you want to let the SBC init script to manage the firewall rules, enable the switch."
+ "header": "By default, Karoo does not manage the firewall. If you want to let the SBC init script to manage the firewall rules, enable the switch.",
+ "editButtonForInterface": "You cannot edit this firewall rule because it is Reserved for an interface. Edit the Interface instead.",
+ "deleteButtonForInterface": "You cannot delete this firewall rule because it is Reserved for an interface. Delete the Interface instead."
 }
