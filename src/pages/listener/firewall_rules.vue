@@ -30,7 +30,8 @@
         </el-form-item>
       </el-form>
     </el-col>
-    <el-table :data="firewallRules" highlight-current-row v-loading="listLoading" @selection-change="selsChange" border style="width: 100%;">
+    <el-table :data="firewallRules" highlight-current-row v-loading="listLoading" 
+        @selection-change="selsChange" @sort-change="sortChange" border style="width: 100%;">
       <el-table-column prop="id" label="Name" width="200" :sortable="!disabled">
       </el-table-column>
       <el-table-column label="Port Range">
@@ -44,15 +45,27 @@
 
       <el-table-column label="Actions">
         <template scope="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)" :disabled="disabled">Edit</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)" :disabled="disabled">Delete</el-button>
+          <div v-if="scope.row.interfaceName">
+            <el-tooltip :content="$t('firewall.editButtonForInterface')" placement="top">
+              <el-button size="small" @click="handleEdit(scope.$index, scope.row)" :disabled="true">Edit</el-button>
+            </el-tooltip>
+            <el-tooltip :content="$t('firewall.deleteButtonForInterface')" placement="top">
+              <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)" :disabled="true">Delete</el-button>
+            </el-tooltip>
+          </div>
+          <div v-else>
+            <el-button size="small" @click="handleEdit(scope.$index, scope.row)" :disabled="disabled">Edit</el-button>
+            <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)" :disabled="disabled">Delete</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
 
     <el-col :span="24" class="toolbar">
       <!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">Delete Batch</el-button> -->
-      <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+      <el-pagination layout="total, sizes, prev, pager, next, jumper" 
+        @current-change="handleCurrentChange"  @size-change="handleSizeChange"
+        :page-size="pageSize" :total="total" style="float:right;">
       </el-pagination>
     </el-col>
     <el-dialog title="Edit" v-model="editFormVisible" :close-on-click-modal="false">
@@ -157,8 +170,11 @@
         formFirewallLoading: true,
         disabled: false,
         firewallRules: [],
+        sortByField: '',
+        sortOrder: '',
         total: 0,
         page: 1,
+        pageSize: 20,
         listLoading: false,
         sels: [],
         editFormVisible: false,
@@ -177,6 +193,7 @@
           portBase: 0,
           portMax: 0,
           type: 'UDP',
+          interfaceName: '',
         },
         addFormVisible: false,
         addLoading: false,
@@ -194,6 +211,7 @@
           portBase: 0,
           portMax: 0,
           type: 'UDP',
+          interfaceName: '',
         },
       };
     },
@@ -236,6 +254,10 @@
 
       handleCurrentChange(val) {
         this.page = val;
+        this.getFirewallRules(val);
+      },
+      handleSizeChange(val) {
+        this.pageSize = val;
         this.getFirewallRules();
       },
       getFirewall() {
@@ -256,30 +278,54 @@
             this.$refs.formFirewall.resetFields();
             this.formFirewall.id = FORM_FIREWALL_ID;
             Vue.console.warn('No record found.');
-            // this.sourceAddresses = [];
           }
           this.formFirewallLoading = false;
           // NProgress.done();
         });
       },
-      getFirewallRules() {
+      getFirewallRules(page) {
         const params = {
           'filter[where][id]': this.filters.id,
         };
+        if (this.page && this.page > 0) {
+          params['filter[limit]'] = this.pageSize;
+          params['filter[skip]'] = this.pageSize * (page - 1);
+          if (this.sortByField) {
+            params['filter[order]'] = this.sortByField + ' ' + this.sortOrder;
+          }
+        }
+        /*
+        /firewallrules?filter[order][0]=propertyName
+        <ASC|DESC>&filter[order][1][propertyName]=<ASC|DESC>...
+        /firewallrules?filter[limit]=10&filter[skip]=20
+        */
         this.listLoading = true;
         // NProgress.start();
+        const getCount = new FirewallRulesProxy(params).count().then((response) => {
+          if (typeof response !== 'undefined'
+            && response > 0) {
+            this.total = response;
+          } else {
+            this.total = 0;
+          }
+          // NProgress.done();
+          this.listLoading = false;
+        });
+
         new FirewallRulesProxy(params).findAll().then((response) => {
           if (typeof response !== 'undefined'
             && response.length > 0
             && typeof response[0].id !== 'undefined'
             && response[0].id !== 'undefined') {
-            this.total = response.length;
+            // this.total = response.length;
             this.firewallRules = response;
+            getCount();
           } else {
-            this.total = 0;
+            // this.total = 0;
             this.firewallRules = [];
+            this.listLoading = false;
           }
-          this.listLoading = false;
+          // this.listLoading = false;
           // NProgress.done();
         });
       },
@@ -383,6 +429,19 @@
       },
       selsChange(sels) {
         this.sels = sels;
+      },
+      sortChange({ column, prop, order }) {
+        // Vue.console.log('Column: ' + column
+        // + ', Prop: ' + prop + ', order: ' + order);
+        // for now we need to custom map the fields
+        if (prop === 'portBase') {
+          this.sortByField = 'port_base';
+        } else if (prop === 'portMax') {
+          this.sortByField = 'port_max';
+        } else {
+          this.sortByField = prop;
+        }
+        this.sortOrder = (order === 'ascending' ? 'ASC' : 'DESC');
       },
     },
     mounted() {
