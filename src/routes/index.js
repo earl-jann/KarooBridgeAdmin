@@ -33,12 +33,19 @@ export default [
         { path: '/interface', component: require('@/pages/listener/listener.vue'), name: 'Interfaces' },
         { path: '/ha-interface', component: require('@/pages/listener/carp_ha_interface.vue'), name: 'High Availability Interface' },
         { path: '/tls', component: require('@/pages/listener/tls.vue'), name: 'TLS' },
-        { path: '/autoban', component: require('@/pages/listener/autoban.vue'), name: 'Packet Rate Limits' },
-        { path: '/autoban-packet-rate-whitelist', component: require('@/pages/listener/autoban_packet_rate_whitelist.vue'), name: 'Packet Rate Whitelist' },
+        { path: '/packet-rate-limits', component: require('@/pages/listener/packet_rate_limits.vue'), name: 'Packet Rate Limits' },
         { path: '/firewall-rules', component: require('@/pages/listener/firewall_rules.vue'), name: 'Firewall Rules' },
         { path: '/port-ranges', component: require('@/pages/listener/port_ranges.vue'), name: 'Port Ranges' },
         { path: '/rtp-proxy', component: require('@/pages/listener/rtp_proxy.vue'), name: 'RTP Proxy' },
     ],
+    /*
+        { path: '/autoban',
+          component: require('@/pages/listener/autoban.vue'),
+          name: 'Packet Rate Limits' },
+        { path: '/autoban-packet-rate-whitelist',
+          component: require('@/pages/listener/autoban_packet_rate_whitelist.vue'),
+          name: 'Packet Rate Whitelist' },
+    */
     // If the user needs to be authenticated to view this page
     meta: {
       auth: true,
